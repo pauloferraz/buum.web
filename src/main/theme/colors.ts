@@ -1,0 +1,6 @@
+export const primary = '#38003c'
+export const secondary = '#e90052'
+export const tertiary = '#00ff85'
+export const white = '#fff'
+export const black = '#222'
+export const grey = '#fbfbfb'

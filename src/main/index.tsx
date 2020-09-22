@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Login from '@/presentation/pages/login/login'
+import GlobalStyles from '@/main/theme/globalStyles'
 
-ReactDOM.render(<Login/>, document.getElementById('main'))
+ReactDOM.render(<><GlobalStyles/><Login/></>, document.getElementById('main'))
