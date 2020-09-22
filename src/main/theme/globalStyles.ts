@@ -1,18 +1,17 @@
 import { createGlobalStyle } from 'styled-components'
-import * as color from './colors'
 
 const GlobalStyle = createGlobalStyle`
 
 * {
   font-family: 'Roboto', sans-serif;
-  color: ${color.black};
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
 }
 
   body {
-    margin: 0;
-    padding: 0;
-    background: ${color.grey};
-    box-sizing: border-box;
+    background:${props => props.theme.colors.grey};
   }
 `
 

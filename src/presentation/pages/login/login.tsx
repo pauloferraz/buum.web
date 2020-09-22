@@ -1,16 +1,33 @@
 import React from 'react'
 
-// import { Container } from './styles';
+import {
+  Container,
+  LoginContainer,
+  FormLogin,
+  Title,
+  SubTitle,
+  Input,
+  Button,
+  LinkCreate
+} from './styles'
 
 const Login: React.FC = () => {
-  return <div>
-    <h1>Login</h1>
-    <form>
-      <input type="email" placeholder="Digite seu e-mail"/>
-      <input type="password" placeholder="Digite sua senha"/>
-      <button type="submit">Entrar</button>
-    </form>
-  </div>
+  return (
+    <Container>
+      <LoginContainer>
+        <Title>Portal do vendedor</Title>
+        <SubTitle>Gerencie sua loja de forma fácil e rápida</SubTitle>
+        <FormLogin>
+          <Input type='email' placeholder='Digite seu e-mail' />
+          <Input type='password' placeholder='Digite sua senha' />
+          <Button type='submit'>Entrar</Button>
+        </FormLogin>
+        <LinkCreate>
+          Não tem acesso? <a href='#'> Crie sua conta</a> e comece a vender.
+        </LinkCreate>
+      </LoginContainer>
+    </Container>
+  )
 }
 
 export default Login
