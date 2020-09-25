@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import FormStatus from '@/presentation/components/form-status'
 import Input from '@/presentation/components/input'
 import Context from '@/presentation/contexts/form-context'
+import { Validation } from '@/presentation/protocols/validation'
 
 import {
   Container,
@@ -13,24 +14,27 @@ import {
   LinkCreate
 } from './styles'
 
-type StateProps = {
-  isLoading: boolean
-  errorMessage: string
+type Props = {
+  validation: Validation
 }
 
-const Login: React.FC = () => {
-  const [state] = useState<StateProps>({ isLoading: false, errorMessage: '' })
+const Login: React.FC<Props> = ({ validation }: Props) => {
+  const [state, setState] = useState({ isLoading: false, email: '', emailError: '', errorMessage: '' })
+
+  useEffect(() => {
+    validation.validade({ email: state.email })
+  }, [state.email])
 
   return (
     <Container>
       <LoginContainer>
-        <Context.Provider value={state}>
+        <Context.Provider value={{ state, setState }}>
           <Title>Portal do vendedor</Title>
           <SubTitle>Gerencie sua loja de forma fácil e rápida</SubTitle>
           <FormLogin>
-            <Input type='email' placeholder='Digite seu e-mail' />
-            <Input type='password' placeholder='Digite sua senha' />
-            <Button type='submit' disabled data-testid="submit-button">Entrar</Button>
+            <Input type='email' name='email' placeholder='Digite seu e-mail' />
+            <Input type='password' name='password' placeholder='Digite sua senha' />
+            <Button type='submit' disabled data-testid='submit-button'>Entrar</Button>
           </FormLogin>
 
           <LinkCreate>
