@@ -31,20 +31,6 @@ export const SubTitle = styled.p`
   margin-bottom:15px;
 `
 
-export const Input = styled.input`
-  line-height:40px;
-  background:${props => props.theme.colors.grey};
-  border:1px solid ${props => props.theme.colors.grey};
-  margin-top:10px;
-  padding:0px 15px;
-  border-radius:4px;
-
-  &:focus{
-    outline-color:${props => props.theme.colors.primary};
-    background:${props => props.theme.colors.white};
-  }
-`
-
 export const Button = styled.button`
   line-height:40px;
   border:1px solid ${props => props.theme.colors.primary};

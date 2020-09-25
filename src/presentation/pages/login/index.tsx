@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import FormStatus from '@/presentation/components/form-status'
+import Input from '@/presentation/components/input'
 import Context from '@/presentation/contexts/form-context'
 
 import {
@@ -8,7 +9,6 @@ import {
   FormLogin,
   Title,
   SubTitle,
-  Input,
   Button,
   LinkCreate
 } from './styles'
