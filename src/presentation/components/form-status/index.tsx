@@ -8,7 +8,7 @@ const FormStatus: React.FC = () => {
 
   return <Container data-testid="status-wrap">
     { isLoading && <ScaleLoader
-      color={'#38003c'}
+      color={'#ffce73'}
       loading={true}
     />}
     {errorMessage && <TextError>{errorMessage}</TextError>}
