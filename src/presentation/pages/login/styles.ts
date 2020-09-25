@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 
 export const Container = styled.div`
-  background:${props => props.theme.colors.secondary};
   display:flex;
   justify-content:center;
   align-items:center;
@@ -11,9 +10,9 @@ export const Container = styled.div`
 export const LoginContainer = styled.div`
   background:${props => props.theme.colors.white};
   width:450px;
-  padding:20px;
-  border-radius:4px;
-  box-shadow: 0px 0px 5px -2px ${props => props.theme.colors.black};
+  padding:30px;
+  border-radius:15px;
+  box-shadow: 0px 0px 80px #e2e2e2;
 `
 
 export const FormLogin = styled.form`
@@ -23,7 +22,8 @@ export const FormLogin = styled.form`
 
 export const Title = styled.h1`
   font-size:24px;
-  font-weight: 500;
+  font-weight: 600;
+  letter-spacing: -1px;
 `
 
 export const SubTitle = styled.p`
@@ -33,20 +33,22 @@ export const SubTitle = styled.p`
 
 export const Input = styled.input`
   line-height:40px;
+  background:${props => props.theme.colors.grey};
   border:1px solid ${props => props.theme.colors.grey};
   margin-top:10px;
   padding:0px 15px;
   border-radius:4px;
 
   &:focus{
-    outline-color:${props => props.theme.colors.black};
+    outline-color:${props => props.theme.colors.primary};
+    background:${props => props.theme.colors.white};
   }
 `
 
 export const Button = styled.button`
   line-height:40px;
-  border:1px solid ${props => props.theme.colors.secondary};
-  background: ${props => props.theme.colors.secondary};
+  border:1px solid ${props => props.theme.colors.primary};
+  background: ${props => props.theme.colors.primary};
   color:${props => props.theme.colors.white};
   margin-top:25px;
   border-radius:4px;
@@ -60,6 +62,15 @@ export const Button = styled.button`
 
   &:focus{
     outline:none;
+  }
+
+  &:disabled {
+    opacity:0.5;
+
+    &:hover{
+      filter: brightness(1);
+      cursor:default;
+    }
   }
 `
 

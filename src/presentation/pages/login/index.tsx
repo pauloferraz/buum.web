@@ -30,7 +30,7 @@ const Login: React.FC = () => {
           <FormLogin>
             <Input type='email' placeholder='Digite seu e-mail' />
             <Input type='password' placeholder='Digite sua senha' />
-            <Button type='submit'>Entrar</Button>
+            <Button type='submit' disabled data-testid="submit-button">Entrar</Button>
           </FormLogin>
 
           <LinkCreate>
