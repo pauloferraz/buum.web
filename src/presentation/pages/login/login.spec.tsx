@@ -13,5 +13,8 @@ describe('Login Component', () => {
     )
     const statusWrap = getByTestId('status-wrap')
     expect(statusWrap.childElementCount).toBe(0)
+
+    const submitButton = getByTestId('submit-button') as HTMLButtonElement
+    expect(submitButton.disabled).toBeTruthy()
   })
 })
