@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import Context from '@/presentation/contexts/form-context'
-import { InputWrap } from './styles'
+import { InputWrap, ErrorMsg } from './styles'
 
 type Props = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
 
@@ -18,7 +18,7 @@ const Input: React.FC<Props> = (props: Props) => {
   return (
     <InputWrap>
       <input {...props} data-testid={props.name} onChange={handleChange} />
-      <span>{error}</span>
+      <ErrorMsg data-testid={`${props.name}Error`}>{error}</ErrorMsg>
     </InputWrap>
   )
 }

@@ -16,5 +16,11 @@ input{
     background:${props => props.theme.colors.white};
   }
 }
-  
+`
+export const ErrorMsg = styled.span`
+  color: red;
+  font-size: 10px;
+  margin: 2px 0px 0px 5px;
+  font-weight: 500;
+  display: block;
 `
