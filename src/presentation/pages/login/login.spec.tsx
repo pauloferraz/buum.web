@@ -3,22 +3,22 @@ import { render, RenderResult, fireEvent, cleanup } from '@testing-library/react
 import { ThemeProvider } from 'styled-components'
 import light from '@/presentation/theme/light'
 import Login from '.'
-import { ValidationSpy } from '@/presentation/test'
+import { ValidationStub } from '@/presentation/test'
 import faker from 'faker'
 
 type SutTypes = {
   sut: RenderResult
-  validationSpy: ValidationSpy
+  validationStub: ValidationStub
 }
 
 const makeSut = (): SutTypes => {
-  const validationSpy = new ValidationSpy()
+  const validationStub = new ValidationStub()
   const sut = render(
     <ThemeProvider theme={light}>
-      <Login validation={validationSpy}/>
+      <Login validation={validationStub}/>
     </ThemeProvider>
   )
-  return { sut, validationSpy }
+  return { sut, validationStub }
 }
 
 describe('Login Component', () => {
@@ -33,19 +33,10 @@ describe('Login Component', () => {
     expect(submitButton.disabled).toBeTruthy()
   })
 
-  test('should call Validation with correct value', () => {
-    const { sut, validationSpy } = makeSut()
-    const emailInput = sut.getByTestId('email')
-    const email = faker.internet.email()
-    fireEvent.input(emailInput, { target: { value: email } })
-    expect(validationSpy.inputName).toBe('email')
-    expect(validationSpy.inputValue).toBe(email)
-  })
-
   test('should show email error if Validation fails', () => {
-    const { sut, validationSpy } = makeSut()
+    const { sut, validationStub } = makeSut()
     const errorMsg = faker.random.words()
-    validationSpy.errorMessage = errorMsg
+    validationStub.errorMessage = errorMsg
     const emailInput = sut.getByTestId('email')
     fireEvent.input(emailInput, { target: { value: faker.internet.email() } })
     const errorMessage = sut.getByTestId('emailError')
