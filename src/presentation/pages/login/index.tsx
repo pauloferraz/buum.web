@@ -19,10 +19,16 @@ type Props = {
 }
 
 const Login: React.FC<Props> = ({ validation }: Props) => {
-  const [state, setState] = useState({ isLoading: false, email: '', emailError: '', errorMessage: '' })
+  const [state, setState] = useState({
+    isLoading: false,
+    email: '',
+    password: '',
+    emailError: '',
+    errorMessage: ''
+  })
 
   useEffect(() => {
-    validation.validade({ email: state.email })
+    validation.validade('email', state.email)
   }, [state.email])
 
   return (

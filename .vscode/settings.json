@@ -7,5 +7,8 @@
   "javascript.format.semicolons": "remove",
   "typescript.format.semicolons": "remove",
   "prettier.semi": false,
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "files.autoSave": "onFocusChange",
+  "editor.fontFamily": "Fira Code",
+  "files.insertFinalNewline": true
 }
