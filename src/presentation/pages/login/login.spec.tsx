@@ -3,8 +3,8 @@ import { render, RenderResult, fireEvent, cleanup } from '@testing-library/react
 import { ThemeProvider } from 'styled-components'
 import light from '@/presentation/theme/light'
 import Login from '.'
-
 import { ValidationSpy } from '@/presentation/test'
+import faker from 'faker'
 
 type SutTypes = {
   sut: RenderResult
@@ -36,8 +36,9 @@ describe('Login Component', () => {
   test('should call Validation with correct value', () => {
     const { sut, validationSpy } = makeSut()
     const emailInput = sut.getByTestId('email')
-    fireEvent.input(emailInput, { target: { value: 'any_email' } })
+    const email = faker.internet.email()
+    fireEvent.input(emailInput, { target: { value: email } })
     expect(validationSpy.inputName).toBe('email')
-    expect(validationSpy.inputValue).toBe('any_email')
+    expect(validationSpy.inputValue).toBe(email)
   })
 })
