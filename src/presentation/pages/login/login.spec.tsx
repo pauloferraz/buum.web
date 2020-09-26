@@ -4,22 +4,11 @@ import { ThemeProvider } from 'styled-components'
 import light from '@/presentation/theme/light'
 import Login from '.'
 
-import { Validation } from '@/presentation/protocols/validation'
+import { ValidationSpy } from '@/presentation/test'
 
 type SutTypes = {
   sut: RenderResult
   validationSpy: ValidationSpy
-}
-
-class ValidationSpy implements Validation {
-  errorMessage: string
-  inputName: string
-  inputValue: string
-  validade(inputName: string, inputValue: string): string {
-    this.inputName = inputName
-    this.inputValue = inputValue
-    return this.errorMessage
-  }
 }
 
 const makeSut = (): SutTypes => {
