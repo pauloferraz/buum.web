@@ -33,16 +33,6 @@ describe('Login Component', () => {
     expect(submitButton.disabled).toBeTruthy()
   })
 
-  test('should show email error if Validation fails', () => {
-    const { sut, validationStub } = makeSut()
-    const errorMsg = faker.random.words()
-    validationStub.errorMessage = errorMsg
-    const emailInput = sut.getByTestId('email')
-    fireEvent.input(emailInput, { target: { value: faker.internet.email() } })
-    const errorMessage = sut.getByTestId('emailError')
-    expect(errorMessage.textContent).toBe(errorMsg)
-  })
-
   test('should show email valid password state if Validation succeeds', () => {
     const { sut, validationStub } = makeSut()
     validationStub.errorMessage = null
@@ -50,5 +40,16 @@ describe('Login Component', () => {
     fireEvent.input(emailInput, { target: { value: faker.internet.email() } })
     const errorMessage = sut.getByTestId('emailError')
     expect(errorMessage.textContent.length).toBe(0)
+  })
+
+  test('should enable submit button if form is valid', () => {
+    const { sut, validationStub } = makeSut()
+    validationStub.errorMessage = null
+    const emailInput = sut.getByTestId('email')
+    fireEvent.input(emailInput, { target: { value: faker.internet.email() } })
+    const passwordInput = sut.getByTestId('password')
+    fireEvent.input(passwordInput, { target: { value: faker.internet.password() } })
+    const submitBtn = sut.getByTestId('submit-button') as HTMLButtonElement
+    expect(submitBtn.disabled).toBe(false)
   })
 })
