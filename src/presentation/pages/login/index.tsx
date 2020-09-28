@@ -24,15 +24,23 @@ const Login: React.FC<Props> = ({ validation }: Props) => {
     email: '',
     password: '',
     emailError: '',
-    errorMessage: ''
+    errorMessage: '',
+    btnDisabled: true
   })
 
   useEffect(() => {
-    setState({
-      ...state,
-      emailError: validation.validade('email', state.email)
-    })
-  }, [state.email])
+    if (state.email.length > 0 && state.password.length > 0) {
+      setState({
+        ...state,
+        btnDisabled: false
+      })
+    } else {
+      setState({
+        ...state,
+        btnDisabled: true
+      })
+    }
+  }, [state.email, state.password])
 
   return (
     <Container>
@@ -40,10 +48,10 @@ const Login: React.FC<Props> = ({ validation }: Props) => {
         <Context.Provider value={{ state, setState }}>
           <Title>Portal do vendedor</Title>
           <SubTitle>Gerencie sua loja de forma fácil e rápida</SubTitle>
-          <FormLogin>
+          <FormLogin autoComplete="off">
             <Input type='email' name='email' placeholder='Digite seu e-mail' />
             <Input type='password' name='password' placeholder='Digite sua senha' />
-            <Button type='submit' disabled data-testid='submit-button'>Entrar</Button>
+            <Button type='submit' disabled={state.btnDisabled} data-testid='submit-button'>Entrar</Button>
           </FormLogin>
 
           <LinkCreate>
