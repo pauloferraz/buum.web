@@ -1,24 +1,39 @@
 import React from 'react'
+import faker from 'faker'
 import { render, RenderResult, fireEvent, cleanup } from '@testing-library/react'
 import { ThemeProvider } from 'styled-components'
 import light from '@/presentation/theme/light'
 import Login from '.'
 import { ValidationStub } from '@/presentation/test'
-import faker from 'faker'
+import { Authentication, AuthenticationParams } from '@/domain/usecases'
+import { AccountModel } from '@/domain/models'
+import { mockAccountModel } from '@/domain/test'
+
+class AuthenticationSpy implements Authentication {
+  account = mockAccountModel()
+  params: AuthenticationParams
+
+  async auth (params: AuthenticationParams): Promise<AccountModel> {
+    this.params = params
+    return Promise.resolve(this.account)
+  }
+}
 
 type SutTypes = {
   sut: RenderResult
   validationStub: ValidationStub
+  authenticationSpy: AuthenticationSpy
 }
 
 const makeSut = (): SutTypes => {
   const validationStub = new ValidationStub()
+  const authenticationSpy = new AuthenticationSpy()
   const sut = render(
     <ThemeProvider theme={light}>
-      <Login validation={validationStub}/>
+      <Login validation={validationStub} authentication={authenticationSpy}/>
     </ThemeProvider>
   )
-  return { sut, validationStub }
+  return { sut, validationStub, authenticationSpy }
 }
 
 describe('Login Component', () => {
@@ -64,5 +79,22 @@ describe('Login Component', () => {
     fireEvent.click(submitBtn)
     const spinner = sut.getByTestId('status-wrap')
     expect(spinner).toBeTruthy()
+  })
+
+  test('should call Authentication with correct values', () => {
+    const { sut, validationStub, authenticationSpy } = makeSut()
+    validationStub.errorMessage = null
+    const emailInput = sut.getByTestId('email')
+    const email = faker.internet.email()
+    fireEvent.input(emailInput, { target: { value: email } })
+    const passwordInput = sut.getByTestId('password')
+    const password = faker.internet.password()
+    fireEvent.input(passwordInput, { target: { value: password } })
+    const submitBtn = sut.getByTestId('submit-button')
+    fireEvent.click(submitBtn)
+    expect(authenticationSpy.params).toEqual({
+      email,
+      password
+    })
   })
 })
