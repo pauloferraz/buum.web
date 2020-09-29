@@ -42,13 +42,18 @@ const Login: React.FC<Props> = ({ validation }: Props) => {
     }
   }, [state.email, state.password])
 
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
+    event.preventDefault()
+    setState({ ...state, isLoading: true })
+  }
+
   return (
     <Container>
       <LoginContainer>
         <Context.Provider value={{ state, setState }}>
           <Title>Portal do vendedor</Title>
           <SubTitle>Gerencie sua loja de forma fácil e rápida</SubTitle>
-          <FormLogin autoComplete="off">
+          <FormLogin autoComplete="off" onSubmit={handleSubmit}>
             <Input type='email' name='email' placeholder='Digite seu e-mail' />
             <Input type='password' name='password' placeholder='Digite sua senha' />
             <Button type='submit' disabled={state.btnDisabled} data-testid='submit-button'>Entrar</Button>
