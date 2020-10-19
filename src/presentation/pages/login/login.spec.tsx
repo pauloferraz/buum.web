@@ -8,6 +8,7 @@ import { ThemeProvider } from 'styled-components'
 import light from '@/presentation/theme/light'
 import Login from '.'
 import { ValidationStub, AuthenticationSpy } from '@/presentation/test'
+import { InvalidCredencialError } from "@/domain/errors"
 
 type SutTypes = {
   sut: RenderResult
@@ -29,15 +30,16 @@ const makeSut = (): SutTypes => {
   return { sut, validationStub, authenticationSpy }
 }
 
-const simulateValidSubmit = (
+const simulateValidSubmit = async (
   sut: RenderResult,
   email = faker.internet.email(),
   password = faker.internet.password()
-): void => {
+): Promise<void> => {
   populateEmailField(sut, email)
   populatePasswordField(sut, password)
-  const submitBtn = sut.getByTestId('submit-button')
-  fireEvent.click(submitBtn)
+  const form = sut.getByTestId('login-form')
+  fireEvent.submit(form)
+  await waitFor(() => form)
 }
 
 const populateEmailField = (sut: RenderResult, email = faker.internet.email()): void => {
@@ -82,40 +84,39 @@ describe('Login Component', () => {
     expect(submitBtn.disabled).toBe(false)
   })
 
-  test('should enable spinner on form submit', () => {
+  test('should enable spinner on form submit', async () => {
     const { sut, validationStub } = makeSut()
     validationStub.errorMessage = null
-    simulateValidSubmit(sut)
+    await simulateValidSubmit(sut)
     const spinner = sut.getByTestId('status-wrap')
     expect(spinner).toBeTruthy()
   })
 
-  test('should call Authentication with correct values', () => {
+  test('should call Authentication with correct values', async () => {
     const { sut, validationStub, authenticationSpy } = makeSut()
     validationStub.errorMessage = null
     const email = faker.internet.email()
     const password = faker.internet.password()
-    simulateValidSubmit(sut, email, password)
+    await simulateValidSubmit(sut, email, password)
     expect(authenticationSpy.params).toEqual({
       email,
       password
     })
   })
 
-  test('should call Authentication only once', () => {
+  test('should call Authentication only once', async () => {
     const { sut, authenticationSpy } = makeSut()
-    simulateValidSubmit(sut)
-    simulateValidSubmit(sut)
+    await simulateValidSubmit(sut)
+    await simulateValidSubmit(sut)
     expect(authenticationSpy.callsCount).toBe(1)
   })
 
-  /*   test('should present error if Authentication fails', async () => {
+/*    test('should present error if Authentication fails', async () => {
     const { sut, authenticationSpy } = makeSut()
     const error = new InvalidCredencialError()
     jest.spyOn(authenticationSpy, 'auth').mockReturnValueOnce(Promise.reject(error))
-    simulateValidSubmit(sut)
+    await simulateValidSubmit(sut)
     const statusWrap = sut.getByTestId('status-wrap')
-    await waitFor(() => sut.getByTestId('login-form'))
     const mainError = sut.getByTestId('main-error')
     expect(mainError.textContent).toBe(error.message)
     expect(statusWrap.childElementCount).toBe(0)
@@ -123,8 +124,7 @@ describe('Login Component', () => {
 
   test('should add accessToken to localStorage on success', async () => {
     const { sut, authenticationSpy } = makeSut()
-    simulateValidSubmit(sut)
-    await waitFor(() => sut.getByTestId('login-form'))
+    await simulateValidSubmit(sut)
     expect(localStorage.setItem).toHaveBeenCalledWith(
       'accessToken', authenticationSpy.account.accessToken
     )
