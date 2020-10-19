@@ -1,4 +1,6 @@
 import React from 'react'
+import { Router } from 'react-router-dom'
+import { createMemoryHistory } from 'history'
 import faker from 'faker'
 import 'jest-localstorage-mock'
 import { render, RenderResult, fireEvent, cleanup, waitFor } from '@testing-library/react'
@@ -13,13 +15,16 @@ type SutTypes = {
   authenticationSpy: AuthenticationSpy
 }
 
+const history = createMemoryHistory()
 const makeSut = (): SutTypes => {
   const validationStub = new ValidationStub()
   const authenticationSpy = new AuthenticationSpy()
   const sut = render(
-    <ThemeProvider theme={light}>
-      <Login validation={validationStub} authentication={authenticationSpy}/>
-    </ThemeProvider>
+    <Router history={history}>
+      <ThemeProvider theme={light}>
+        <Login validation={validationStub} authentication={authenticationSpy}/>
+      </ThemeProvider>
+    </Router>
   )
   return { sut, validationStub, authenticationSpy }
 }
@@ -104,22 +109,32 @@ describe('Login Component', () => {
     expect(authenticationSpy.callsCount).toBe(1)
   })
 
-  /* test('should present error if Authentication fails', async () => {
+  /*   test('should present error if Authentication fails', async () => {
     const { sut, authenticationSpy } = makeSut()
     const error = new InvalidCredencialError()
     jest.spyOn(authenticationSpy, 'auth').mockReturnValueOnce(Promise.reject(error))
     simulateValidSubmit(sut)
     const statusWrap = sut.getByTestId('status-wrap')
-    await waitFor(() => statusWrap)
+    await waitFor(() => sut.getByTestId('login-form'))
     const mainError = sut.getByTestId('main-error')
     expect(mainError.textContent).toBe(error.message)
     expect(statusWrap.childElementCount).toBe(0)
-  }) */
+  })  */
 
   test('should add accessToken to localStorage on success', async () => {
     const { sut, authenticationSpy } = makeSut()
     simulateValidSubmit(sut)
     await waitFor(() => sut.getByTestId('login-form'))
-    expect(localStorage.setItem).toHaveBeenCalledWith('accessToken', authenticationSpy.account.accessToken)
+    expect(localStorage.setItem).toHaveBeenCalledWith(
+      'accessToken', authenticationSpy.account.accessToken
+    )
+  })
+
+  test('should go to signup page', () => {
+    const { sut } = makeSut()
+    const register = sut.getByTestId('signup')
+    fireEvent.click(register)
+    expect(history.length).toBe(2)
+    expect(history.location.pathname).toBe('/signup')
   })
 })
