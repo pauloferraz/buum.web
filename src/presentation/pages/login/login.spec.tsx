@@ -1,6 +1,7 @@
 import React from 'react'
 import faker from 'faker'
-import { render, RenderResult, fireEvent, cleanup } from '@testing-library/react'
+import 'jest-localstorage-mock'
+import { render, RenderResult, fireEvent, cleanup, waitFor } from '@testing-library/react'
 import { ThemeProvider } from 'styled-components'
 import light from '@/presentation/theme/light'
 import Login from '.'
@@ -46,6 +47,9 @@ const populatePasswordField = (sut: RenderResult, password = faker.internet.pass
 
 describe('Login Component', () => {
   afterEach(cleanup)
+  beforeEach(() => {
+    localStorage.clear()
+  })
 
   test('should start with initial state', () => {
     const { sut } = makeSut()
@@ -111,4 +115,11 @@ describe('Login Component', () => {
     expect(mainError.textContent).toBe(error.message)
     expect(statusWrap.childElementCount).toBe(0)
   }) */
+
+  test('should add accessToken to localStorage on success', async () => {
+    const { sut, authenticationSpy } = makeSut()
+    simulateValidSubmit(sut)
+    await waitFor(() => sut.getByTestId('login-form'))
+    expect(localStorage.setItem).toHaveBeenCalledWith('accessToken', authenticationSpy.account.accessToken)
+  })
 })
