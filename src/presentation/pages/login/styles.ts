@@ -60,7 +60,7 @@ export const Button = styled.button`
   }
 `
 
-export const LinkCreate = styled.span`
+export const LinkCreate = styled.div`
   font-size:12px;
   color:${props => props.theme.colors.black};
   margin-top: 15px;

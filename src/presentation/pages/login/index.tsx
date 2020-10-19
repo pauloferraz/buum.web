@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import FormStatus from '@/presentation/components/form-status'
 import Input from '@/presentation/components/input'
 import Context from '@/presentation/contexts/form-context'
@@ -73,9 +74,8 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
             <Input type='password' name='password' placeholder='Digite sua senha' />
             <Button type='submit' disabled={state.btnDisabled} data-testid='submit-button'>Entrar</Button>
           </FormLogin>
-
           <LinkCreate>
-          Não tem acesso? <a href='#'> Crie sua conta</a> e comece a vender.
+              Não tem acesso? <Link data-testid='signup' to='/signup'> Crie sua conta</Link>e comece a vender.
           </LinkCreate>
           <FormStatus/>
         </Context.Provider>
