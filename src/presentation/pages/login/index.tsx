@@ -52,7 +52,11 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
         return
       }
       setState({ ...state, isLoading: true })
-      await authentication.auth({ email: state.email, password: state.password })
+      const account = await authentication.auth({
+        email: state.email,
+        password: state.password
+      })
+      localStorage.setItem('accessToken', account.accessToken)
     } catch (error) {
       setState({ ...state, isLoading: false, errorMessage: error.message })
     }
@@ -64,7 +68,7 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
         <Context.Provider value={{ state, setState }}>
           <Title>Portal do vendedor</Title>
           <SubTitle>Gerencie sua loja de forma fácil e rápida</SubTitle>
-          <FormLogin autoComplete="off" onSubmit={handleSubmit}>
+          <FormLogin autoComplete="off" onSubmit={handleSubmit} data-testid='login-form'>
             <Input type='email' name='email' placeholder='Digite seu e-mail' />
             <Input type='password' name='password' placeholder='Digite sua senha' />
             <Button type='submit' disabled={state.btnDisabled} data-testid='submit-button'>Entrar</Button>

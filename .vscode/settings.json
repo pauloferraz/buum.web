@@ -10,5 +10,9 @@
   "editor.formatOnSave": true,
   "files.autoSave": "onFocusChange",
   "editor.fontFamily": "Fira Code",
-  "files.insertFinalNewline": true
+  "files.insertFinalNewline": true,
+  "files.autoSaveDelay": 0,
+  "editor.wordWrapColumn": 70,
+  "editor.wrappingIndent": "indent",
+  "editor.wordWrap": "bounded",
 }
