@@ -8,7 +8,6 @@ import { ThemeProvider } from 'styled-components'
 import light from '@/presentation/theme/light'
 import Login from '.'
 import { ValidationStub, AuthenticationSpy } from '@/presentation/test'
-import { InvalidCredencialError } from "@/domain/errors"
 
 type SutTypes = {
   sut: RenderResult
