@@ -23,7 +23,7 @@ const makeSut = (): SutTypes => {
   return { sut, validationStub, authenticationSpy }
 }
 
-const simulateSubmitValid = (
+const simulateValidSubmit = (
   sut: RenderResult,
   email = faker.internet.email(),
   password = faker.internet.password()
@@ -76,7 +76,7 @@ describe('Login Component', () => {
   test('should enable spinner on form submit', () => {
     const { sut, validationStub } = makeSut()
     validationStub.errorMessage = null
-    simulateSubmitValid(sut)
+    simulateValidSubmit(sut)
     const spinner = sut.getByTestId('status-wrap')
     expect(spinner).toBeTruthy()
   })
@@ -86,7 +86,7 @@ describe('Login Component', () => {
     validationStub.errorMessage = null
     const email = faker.internet.email()
     const password = faker.internet.password()
-    simulateSubmitValid(sut, email, password)
+    simulateValidSubmit(sut, email, password)
     expect(authenticationSpy.params).toEqual({
       email,
       password
@@ -95,8 +95,20 @@ describe('Login Component', () => {
 
   test('should call Authentication only once', () => {
     const { sut, authenticationSpy } = makeSut()
-    simulateSubmitValid(sut)
-    simulateSubmitValid(sut)
+    simulateValidSubmit(sut)
+    simulateValidSubmit(sut)
     expect(authenticationSpy.callsCount).toBe(1)
   })
+
+  /* test('should present error if Authentication fails', async () => {
+    const { sut, authenticationSpy } = makeSut()
+    const error = new InvalidCredencialError()
+    jest.spyOn(authenticationSpy, 'auth').mockReturnValueOnce(Promise.reject(error))
+    simulateValidSubmit(sut)
+    const statusWrap = sut.getByTestId('status-wrap')
+    await waitFor(() => statusWrap)
+    const mainError = sut.getByTestId('main-error')
+    expect(mainError.textContent).toBe(error.message)
+    expect(statusWrap.childElementCount).toBe(0)
+  }) */
 })

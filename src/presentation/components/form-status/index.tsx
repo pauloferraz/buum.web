@@ -11,7 +11,7 @@ const FormStatus: React.FC = () => {
       color={'#ffce73'}
       loading={true}
     />}
-    {errorMessage && <TextError>{errorMessage}</TextError>}
+    {errorMessage && <TextError data-testid="main-error">{errorMessage}</TextError>}
   </Container>
 }
 
