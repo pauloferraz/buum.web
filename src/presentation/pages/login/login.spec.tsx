@@ -110,7 +110,7 @@ describe('Login Component', () => {
     expect(authenticationSpy.callsCount).toBe(1)
   })
 
-/*    test('should present error if Authentication fails', async () => {
+  /*    test('should present error if Authentication fails', async () => {
     const { sut, authenticationSpy } = makeSut()
     const error = new InvalidCredencialError()
     jest.spyOn(authenticationSpy, 'auth').mockReturnValueOnce(Promise.reject(error))
