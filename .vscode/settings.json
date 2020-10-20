@@ -1,0 +1,12 @@
+{
+  "javascript.format.semicolons": "remove",
+  "typescript.format.semicolons": "remove",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "modifications",
+  "editor.formatOnType": true,
+  "files.autoSave": "onFocusChange",
+  "prettier.jsxSingleQuote": true,
+  "prettier.singleQuote": true,
+  "prettier.semi": false
+}
