@@ -6,7 +6,14 @@
   "editor.formatOnSaveMode": "modifications",
   "editor.formatOnType": true,
   "files.autoSave": "onFocusChange",
+  "prettier.semi": false,
+  "javascript.preferences.quoteStyle": "single",
+  "typescript.preferences.quoteStyle": "single",
   "prettier.jsxSingleQuote": true,
   "prettier.singleQuote": true,
-  "prettier.semi": false
+  "eslint.format.enable": true,
+  "eslint.codeAction.showDocumentation": {
+  
+    "enable": true
+  }
 }

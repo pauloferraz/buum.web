@@ -22,7 +22,7 @@ const makeSut = (): SutTypes => {
   const sut = render(
     <Router history={history}>
       <ThemeProvider theme={light}>
-        <Login validation={validationStub} authentication={authenticationSpy}/>
+        <Login validation={validationStub} authentication={authenticationSpy} />
       </ThemeProvider>
     </Router>
   )
