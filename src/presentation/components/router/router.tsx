@@ -1,17 +1,20 @@
 import React from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
-import Login from '@/presentation/pages/login'
 import GlobalStyles from '@/presentation/theme/globalStyles'
 import { ThemeProvider } from 'styled-components'
 import light from '@/presentation/theme/light'
 
-const Router: React.FC = () => {
+type Props = {
+  makeLogin: React.FC
+}
+
+const Router: React.FC<Props> = ({ makeLogin }: Props) => {
   return (
     <ThemeProvider theme={light}>
-      <GlobalStyles/>
+      <GlobalStyles />
       <BrowserRouter>
         <Switch>
-          <Route path='/login' exact component={Login} />
+          <Route path='/login' exact component={makeLogin} />
         </Switch>
       </BrowserRouter>
     </ThemeProvider>

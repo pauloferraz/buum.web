@@ -33,7 +33,10 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
   })
 
   useEffect(() => {
-    if (state.email.length > 0 && state.password.length > 0) {
+    if (
+      !validation.validade('email', state.email) &&
+      !validation.validade('password', state.password)
+    ) {
       setState({
         ...state,
         btnDisabled: false
@@ -71,15 +74,34 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
         <Context.Provider value={{ state, setState }}>
           <Title>Portal do vendedor</Title>
           <SubTitle>Gerencie sua loja de forma fácil e rápida</SubTitle>
-          <FormLogin autoComplete="off" onSubmit={handleSubmit} data-testid='login-form'>
-            <Input type='email' name='email' placeholder='Digite seu e-mail' />
-            <Input type='password' name='password' placeholder='Digite sua senha' />
-            <Button type='submit' disabled={state.btnDisabled} data-testid='submit-button'>Entrar</Button>
+          <FormLogin
+            autoComplete='off'
+            onSubmit={handleSubmit}
+            data-testid='login-form'
+          >
+            <Input name='email' placeholder='Digite seu e-mail' />
+            <Input
+              type='password'
+              name='password'
+              placeholder='Digite sua senha'
+            />
+            <Button
+              type='submit'
+              disabled={state.btnDisabled}
+              data-testid='submit-button'
+            >
+              Entrar
+            </Button>
           </FormLogin>
           <LinkCreate>
-              Não tem acesso? <Link data-testid='signup' to='/signup'> Crie sua conta</Link>e comece a vender.
+            Não tem acesso?{' '}
+            <Link data-testid='signup' to='/signup'>
+              {' '}
+              Crie sua conta
+            </Link>
+            e comece a vender.
           </LinkCreate>
-          <FormStatus/>
+          <FormStatus />
         </Context.Provider>
       </LoginContainer>
     </Container>
