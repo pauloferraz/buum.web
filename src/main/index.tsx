@@ -1,5 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Router from '@/presentation/routes/routes'
+import Router from '@/presentation/components/router/router'
 
 ReactDOM.render(<Router/>, document.getElementById('main'))
