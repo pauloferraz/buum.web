@@ -17,5 +17,7 @@
     "enable": true
   },
   "editor.tabSize": 2,
-  "files.trimTrailingWhitespace": true
+  "files.trimTrailingWhitespace": true,
+  "workbench.tree.indent": 2,
+  "prettier.vueIndentScriptAndStyle": true
 }
