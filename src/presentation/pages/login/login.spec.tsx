@@ -8,6 +8,7 @@ import { ThemeProvider } from 'styled-components'
 import light from '@/presentation/theme/light'
 import Login from '.'
 import { ValidationStub, AuthenticationSpy } from '@/presentation/test'
+import { InvalidCredencialError } from '@/domain/errors'
 
 type SutTypes = {
   sut: RenderResult
@@ -110,23 +111,24 @@ describe('Login Component', () => {
     expect(authenticationSpy.callsCount).toBe(1)
   })
 
-  /*  test('should present error if Authentication fails', async () => {
+  test('should present error if Authentication fails', async () => {
     const { sut, authenticationSpy } = makeSut()
     const error = new InvalidCredencialError()
-    jest.spyOn(authenticationSpy, 'auth').mockReturnValueOnce(Promise.reject(error))
+    jest
+      .spyOn(authenticationSpy, 'auth')
+      .mockReturnValueOnce(Promise.reject(error))
     await simulateValidSubmit(sut)
     const statusWrap = sut.getByTestId('status-wrap')
     const mainError = sut.getByTestId('main-error')
     expect(mainError.textContent).toBe(error.message)
-    expect(statusWrap.childElementCount).toBe(0)
-  }) */
+    expect(statusWrap.childElementCount).toBe(1)
+  })
 
   test('should add accessToken to localStorage on success', async () => {
     const { sut, authenticationSpy } = makeSut()
     await simulateValidSubmit(sut)
     expect(localStorage.setItem).toHaveBeenCalledWith(
       'accessToken',
-
       authenticationSpy.account.accessToken
     )
     expect(history.length).toBe(1)

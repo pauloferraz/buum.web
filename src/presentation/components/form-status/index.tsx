@@ -4,7 +4,8 @@ import Context from '@/presentation/contexts/form-context'
 import { Container, TextError } from './styles'
 
 const FormStatus: React.FC = () => {
-  const { isLoading, errorMessage } = useContext(Context)
+  const { state } = useContext(Context)
+  const { isLoading, errorMessage } = state
 
   return <Container data-testid="status-wrap">
     { isLoading && <ScaleLoader

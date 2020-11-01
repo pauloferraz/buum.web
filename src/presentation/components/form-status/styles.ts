@@ -9,5 +9,5 @@ export const Container = styled.div`
 `
 
 export const TextError = styled.p`
-  color:${props => props.theme.colors.secondary};
+  color: ${(props) => props.theme.colors.accent_1};
 `
