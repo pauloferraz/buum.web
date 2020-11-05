@@ -47,7 +47,7 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
         btnDisabled: true
       })
     }
-  }, [state.email, state.password])
+  }, [])
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
