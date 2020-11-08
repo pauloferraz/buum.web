@@ -33,6 +33,10 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
   })
 
   useEffect(() => {
+    console.log(
+      !validation.validade('email', state.email),
+      !validation.validade('password', state.password)
+    )
     if (
       !validation.validade('email', state.email) &&
       !validation.validade('password', state.password)
@@ -47,7 +51,7 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
         btnDisabled: true
       })
     }
-  }, [])
+  }, [state.email, state.password])
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
