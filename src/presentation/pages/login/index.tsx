@@ -4,7 +4,7 @@ import FormStatus from '@/presentation/components/form-status'
 import Input from '@/presentation/components/input'
 import Context from '@/presentation/contexts/form-context'
 import { Validation } from '@/presentation/protocols/validation'
-import { Authentication } from '@/domain/usecases'
+import { Authentication, SaveAccessToken } from '@/domain/usecases'
 
 import {
   Container,
@@ -19,9 +19,14 @@ import {
 type Props = {
   validation: Validation
   authentication: Authentication
+  saveAccessToken: SaveAccessToken
 }
 
-const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
+const Login: React.FC<Props> = ({
+  validation,
+  authentication,
+  saveAccessToken
+}: Props) => {
   const history = useHistory()
   const [state, setState] = useState({
     isLoading: false,
@@ -33,10 +38,6 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
   })
 
   useEffect(() => {
-    console.log(
-      !validation.validade('email', state.email),
-      !validation.validade('password', state.password)
-    )
     if (
       !validation.validade('email', state.email) &&
       !validation.validade('password', state.password)
@@ -53,7 +54,9 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
     }
   }, [state.email, state.password])
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
+  const handleSubmit = async (
+    event: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     event.preventDefault()
 
     try {
@@ -65,7 +68,7 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
         email: state.email,
         password: state.password
       })
-      localStorage.setItem('accessToken', account.accessToken)
+      await saveAccessToken.save(account.accessToken)
       history.replace('/')
     } catch (error) {
       setState({ ...state, isLoading: false, errorMessage: error.message })
