@@ -4,6 +4,8 @@ import GlobalStyles from '@/presentation/theme/globalStyles'
 import { ThemeProvider } from 'styled-components'
 import light from '@/presentation/theme/light'
 
+import Signup from '@/presentation/pages/signup'
+
 type Props = {
   makeLogin: React.FC
 }
@@ -15,6 +17,7 @@ const Router: React.FC<Props> = ({ makeLogin }: Props) => {
       <BrowserRouter>
         <Switch>
           <Route path='/login' exact component={makeLogin} />
+          <Route path='/signup' exact component={Signup} />
         </Switch>
       </BrowserRouter>
     </ThemeProvider>
