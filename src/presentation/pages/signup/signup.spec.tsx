@@ -12,7 +12,7 @@ import { ThemeProvider } from 'styled-components'
 import faker from 'faker'
 import light from '@/presentation/theme/light'
 import Signup from '.'
-import { AddAccountSpy, ValidationStub } from '@/presentation/test'
+import { AddAccountSpy, ValidationStub, Helper } from '@/presentation/test'
 import { EmailInUseError } from '@/domain/errors'
 
 type SutTypes = {
@@ -35,35 +35,6 @@ const makeSut = (): SutTypes => {
   return { sut, validationStub, addAccountSpy }
 }
 
-const populateNameField = (sut: RenderResult, name = faker.random.word()): void => {
-  const nameInput = sut.getByTestId('name')
-  fireEvent.input(nameInput, { target: { value: name } })
-}
-
-const populateEmailField = (
-  sut: RenderResult,
-  email = faker.internet.email()
-): void => {
-  const emailInput = sut.getByTestId('email')
-  fireEvent.input(emailInput, { target: { value: email } })
-}
-
-const populatePasswordField = (
-  sut: RenderResult,
-  password = faker.internet.password()
-): void => {
-  const passwordInput = sut.getByTestId('password')
-  fireEvent.input(passwordInput, { target: { value: password } })
-}
-
-const populatePasswordConfirmationField = (
-  sut: RenderResult,
-  password = faker.internet.password()
-): void => {
-  const passwordInput = sut.getByTestId('passwordConfirmation')
-  fireEvent.input(passwordInput, { target: { value: password } })
-}
-
 const simulateValidSubmit = async (
   sut: RenderResult,
   name = faker.random.words(),
@@ -71,10 +42,10 @@ const simulateValidSubmit = async (
   password = faker.internet.password(),
   passwordConfirmation = faker.internet.password()
 ): Promise<void> => {
-  populateNameField(sut, name)
-  populateEmailField(sut, email)
-  populatePasswordField(sut, password)
-  populatePasswordConfirmationField(sut, passwordConfirmation)
+  Helper.populateField(sut, 'name', name)
+  Helper.populateField(sut, 'email', email)
+  Helper.populateField(sut, 'password', password)
+  Helper.populateField(sut, 'passwordConfirmation', passwordConfirmation)
   const form = sut.getByTestId('signup-form')
   fireEvent.submit(form)
   await waitFor(() => form)
@@ -95,7 +66,7 @@ describe('Signup component', () => {
   test('should show name valid name state if Validation succeeds', () => {
     const { sut, validationStub } = makeSut()
     validationStub.errorMessage = null
-    populateNameField(sut)
+    Helper.populateField(sut, 'name', faker.random.word())
     const errorMessage = sut.getByTestId('nameError')
     expect(errorMessage.textContent.length).toBe(0)
   })
@@ -103,7 +74,7 @@ describe('Signup component', () => {
   test('should show email valid password state if Validation succeeds', () => {
     const { sut, validationStub } = makeSut()
     validationStub.errorMessage = null
-    populateEmailField(sut)
+    Helper.populateField(sut, 'email', faker.internet.email())
     const errorMessage = sut.getByTestId('emailError')
     expect(errorMessage.textContent.length).toBe(0)
   })
@@ -111,9 +82,9 @@ describe('Signup component', () => {
   test('should enable submit button if form is valid', () => {
     const { sut, validationStub } = makeSut()
     validationStub.errorMessage = null
-    populateEmailField(sut)
-    populateNameField(sut)
-    populatePasswordField(sut)
+    Helper.populateField(sut, 'name', faker.name.findName())
+    Helper.populateField(sut, 'email', faker.internet.email())
+    Helper.populateField(sut, 'password', faker.internet.password())
     const submitBtn = sut.getByTestId('submit-button') as HTMLButtonElement
     expect(submitBtn.disabled).toBe(false)
   })
