@@ -13,6 +13,7 @@ import faker from 'faker'
 import light from '@/presentation/theme/light'
 import Signup from '.'
 import { AddAccountSpy, ValidationStub } from '@/presentation/test'
+import { EmailInUseError } from '@/domain/errors'
 
 type SutTypes = {
   sut: RenderResult
@@ -146,5 +147,16 @@ describe('Signup component', () => {
     await simulateValidSubmit(sut)
     await simulateValidSubmit(sut)
     expect(addAccountSpy.callsCount).toBe(1)
+  })
+
+  test('should present error if AddAccount fails', async () => {
+    const { sut, addAccountSpy } = makeSut()
+    const error = new EmailInUseError()
+    jest.spyOn(addAccountSpy, 'add').mockRejectedValueOnce(error)
+    await simulateValidSubmit(sut)
+    const statusWrap = sut.getByTestId('status-wrap')
+    const mainError = sut.getByTestId('main-error')
+    expect(mainError.textContent).toBe(error.message)
+    expect(statusWrap.childElementCount).toBe(1)
   })
 })
