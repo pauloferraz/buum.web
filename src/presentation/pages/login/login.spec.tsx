@@ -6,7 +6,12 @@ import { render, RenderResult, fireEvent, cleanup, waitFor } from '@testing-libr
 import { ThemeProvider } from 'styled-components'
 import light from '@/presentation/theme/light'
 import Login from '.'
-import { ValidationStub, AuthenticationSpy, SaveAccessTokenMock } from '@/presentation/test'
+import {
+  ValidationStub,
+  AuthenticationSpy,
+  SaveAccessTokenMock,
+  Helper
+} from '@/presentation/test'
 import { InvalidCredencialError } from '@/domain/errors'
 
 type SutTypes = {
@@ -40,21 +45,11 @@ const simulateValidSubmit = async (
   email = faker.internet.email(),
   password = faker.internet.password()
 ): Promise<void> => {
-  populateEmailField(sut, email)
-  populatePasswordField(sut, password)
+  Helper.populateField(sut, 'email', email)
+  Helper.populateField(sut, 'password', password)
   const form = sut.getByTestId('login-form')
   fireEvent.submit(form)
   await waitFor(() => form)
-}
-
-const populateEmailField = (sut: RenderResult, email = faker.internet.email()): void => {
-  const emailInput = sut.getByTestId('email')
-  fireEvent.input(emailInput, { target: { value: email } })
-}
-
-const populatePasswordField = (sut: RenderResult, password = faker.internet.password()): void => {
-  const passwordInput = sut.getByTestId('password')
-  fireEvent.input(passwordInput, { target: { value: password } })
 }
 
 describe('Login Component', () => {
@@ -72,7 +67,7 @@ describe('Login Component', () => {
   test('should show email valid password state if Validation succeeds', () => {
     const { sut, validationStub } = makeSut()
     validationStub.errorMessage = null
-    populateEmailField(sut)
+    Helper.populateField(sut, 'email', faker.internet.email())
     const errorMessage = sut.getByTestId('emailError')
     expect(errorMessage.textContent.length).toBe(0)
   })
@@ -80,8 +75,8 @@ describe('Login Component', () => {
   test('should enable submit button if form is valid', () => {
     const { sut, validationStub } = makeSut()
     validationStub.errorMessage = null
-    populateEmailField(sut)
-    populatePasswordField(sut)
+    Helper.populateField(sut, 'email', faker.internet.email())
+    Helper.populateField(sut, 'password', faker.internet.password())
     const submitBtn = sut.getByTestId('submit-button') as HTMLButtonElement
     expect(submitBtn.disabled).toBe(false)
   })
