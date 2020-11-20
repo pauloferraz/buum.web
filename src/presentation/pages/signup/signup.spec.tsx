@@ -12,27 +12,38 @@ import { ThemeProvider } from 'styled-components'
 import faker from 'faker'
 import light from '@/presentation/theme/light'
 import Signup from '.'
-import { AddAccountSpy, ValidationStub, Helper } from '@/presentation/test'
+import {
+  AddAccountSpy,
+  ValidationStub,
+  Helper,
+  SaveAccessTokenMock
+} from '@/presentation/test'
 import { EmailInUseError } from '@/domain/errors'
 
 type SutTypes = {
   sut: RenderResult
   validationStub: ValidationStub
   addAccountSpy: AddAccountSpy
+  saveAccessTokenMock: SaveAccessTokenMock
 }
 
 const history = createMemoryHistory({ initialEntries: ['/signup'] })
 const makeSut = (): SutTypes => {
   const validationStub = new ValidationStub()
   const addAccountSpy = new AddAccountSpy()
+  const saveAccessTokenMock = new SaveAccessTokenMock()
   const sut = render(
     <Router history={history}>
       <ThemeProvider theme={light}>
-        <Signup validation={validationStub} addAccount={addAccountSpy} />
+        <Signup
+          validation={validationStub}
+          addAccount={addAccountSpy}
+          saveAccessToken={saveAccessTokenMock}
+        />
       </ThemeProvider>
     </Router>
   )
-  return { sut, validationStub, addAccountSpy }
+  return { sut, validationStub, addAccountSpy, saveAccessTokenMock }
 }
 
 const simulateValidSubmit = async (
@@ -129,5 +140,15 @@ describe('Signup component', () => {
     const mainError = sut.getByTestId('main-error')
     expect(mainError.textContent).toBe(error.message)
     expect(statusWrap.childElementCount).toBe(1)
+  })
+
+  test('should call SaveAccessToken on success', async () => {
+    const { sut, addAccountSpy, saveAccessTokenMock } = makeSut()
+    await simulateValidSubmit(sut)
+    expect(saveAccessTokenMock.accessToken).toEqual(
+      addAccountSpy.account.accessToken
+    )
+    expect(history.length).toBe(1)
+    expect(history.location.pathname).toBe('/')
   })
 })
