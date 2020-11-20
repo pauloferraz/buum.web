@@ -108,7 +108,7 @@ const Signup: React.FC<Props> = ({
           </FormLogin>
           <LinkCreate>
             Já tem conta?{' '}
-            <Link data-testid='login' to='/login'>
+            <Link data-testid='login' replace to='/login'>
               {' '}
               Volte para o login
             </Link>
