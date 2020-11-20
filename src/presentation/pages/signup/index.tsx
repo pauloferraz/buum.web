@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import FormStatus from '@/presentation/components/form-status'
 import Input from '@/presentation/components/input'
+import SubmitButton from '@/presentation/components/submit-button'
 import Context from '@/presentation/contexts/form-context'
 import { Validation } from '@/presentation/protocols/validation'
 import { AddAccount, SaveAccessToken } from '@/domain/usecases'
@@ -12,7 +13,6 @@ import {
   FormLogin,
   Title,
   SubTitle,
-  Button,
   LinkCreate
 } from './styles'
 
@@ -36,24 +36,17 @@ const Signup: React.FC<Props> = ({
     passwordConfirmation: '',
     emailError: '',
     errorMessage: '',
-    btnDisabled: true
+    invalidForm: true
   })
 
   useEffect(() => {
-    if (
-      !validation.validade('email', state.email) &&
-      !validation.validade('password', state.password)
-    ) {
-      setState({
-        ...state,
-        btnDisabled: false
-      })
-    } else {
-      setState({
-        ...state,
-        btnDisabled: true
-      })
-    }
+    const emailError = validation.validade('email', state.email)
+    const passwordError = validation.validade('password', state.password)
+
+    setState({
+      ...state,
+      invalidForm: !!emailError || !!passwordError
+    })
   }, [state.email, state.password])
 
   const handleSubmit = async (
@@ -98,13 +91,7 @@ const Signup: React.FC<Props> = ({
               name='passwordConfirmation'
               placeholder='Repita sua senha'
             />
-            <Button
-              type='submit'
-              disabled={state.btnDisabled}
-              data-testid='submit-button'
-            >
-              Cadastrar
-            </Button>
+            <SubmitButton text='Cadastrar' />
           </FormLogin>
           <LinkCreate>
             Já tem conta?{' '}

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import FormStatus from '@/presentation/components/form-status'
 import Input from '@/presentation/components/input'
+import SubmitButton from '@/presentation/components/submit-button'
 import Context from '@/presentation/contexts/form-context'
 import { Validation } from '@/presentation/protocols/validation'
 import { Authentication, SaveAccessToken } from '@/domain/usecases'
@@ -12,7 +13,6 @@ import {
   FormLogin,
   Title,
   SubTitle,
-  Button,
   LinkCreate
 } from './styles'
 
@@ -87,18 +87,8 @@ const Login: React.FC<Props> = ({
             data-testid='login-form'
           >
             <Input name='email' placeholder='Digite seu e-mail' />
-            <Input
-              type='password'
-              name='password'
-              placeholder='Digite sua senha'
-            />
-            <Button
-              type='submit'
-              disabled={state.btnDisabled}
-              data-testid='submit-button'
-            >
-              Entrar
-            </Button>
+            <Input type='password' name='password' placeholder='Digite sua senha' />
+            <SubmitButton text='Entrar' />
           </FormLogin>
           <LinkCreate>
             Não tem acesso?{' '}
