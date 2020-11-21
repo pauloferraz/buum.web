@@ -34,24 +34,20 @@ const Login: React.FC<Props> = ({
     password: '',
     emailError: '',
     errorMessage: '',
-    btnDisabled: true
+    btnDisabled: true,
+    invalidForm: true
   })
 
   useEffect(() => {
-    if (
-      !validation.validade('email', state.email) &&
-      !validation.validade('password', state.password)
-    ) {
-      setState({
-        ...state,
-        btnDisabled: false
-      })
-    } else {
-      setState({
-        ...state,
-        btnDisabled: true
-      })
-    }
+    const { email, password } = state
+    const formData = { email, password }
+    const emailError = validation.validade('email', formData)
+    const passwordError = validation.validade('password', formData)
+
+    setState({
+      ...state,
+      invalidForm: !!emailError || !!passwordError
+    })
   }, [state.email, state.password])
 
   const handleSubmit = async (
