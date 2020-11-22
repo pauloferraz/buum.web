@@ -7,6 +7,7 @@ declare module 'styled-components' {
       secondary: string
       accent_1: string
       accent_2: string
+      alert: string
       white: string
       black: string
       grey: string

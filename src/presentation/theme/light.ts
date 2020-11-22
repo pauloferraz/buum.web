@@ -5,6 +5,7 @@ export default {
     secondary: '#0049c6',
     accent_1: '#ffa2c0',
     accent_2: '#ffce73',
+    alert: '#FF754C',
     white: '#fff',
     black: '#1b1d21',
     grey: '#f7f8f9'

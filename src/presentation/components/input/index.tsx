@@ -1,12 +1,17 @@
+/* eslint-disable @typescript-eslint/indent */
 import React, { useContext } from 'react'
 import Context from '@/presentation/contexts/form-context'
 import { InputWrap, ErrorMsg } from './styles'
 
-type Props = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
+type Props = React.DetailedHTMLProps<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  HTMLInputElement
+> & {
+  errorMsg?: string
+}
 
-const Input: React.FC<Props> = (props: Props) => {
+const Input: React.FC<Props> = ({ errorMsg, ...props }: Props) => {
   const { state, setState } = useContext(Context)
-  const error = state?.emailError
 
   const handleChange = (event: React.FocusEvent<HTMLInputElement>): void => {
     setState({
@@ -18,7 +23,7 @@ const Input: React.FC<Props> = (props: Props) => {
   return (
     <InputWrap>
       <input {...props} data-testid={props.name} onChange={handleChange} />
-      <ErrorMsg data-testid={`${props.name}Error`}>{error}</ErrorMsg>
+      <ErrorMsg data-testid={`${props.name}Error`}>{errorMsg}</ErrorMsg>
     </InputWrap>
   )
 }

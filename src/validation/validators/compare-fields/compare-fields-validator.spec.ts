@@ -1,4 +1,4 @@
-import { InvalidFieldError } from '@/validation/errors'
+import { InvalidCompareFieldError } from '@/validation/errors'
 import { CompareFieldsValidation } from './compare-fields-validator'
 import faker from 'faker'
 
@@ -14,7 +14,7 @@ describe('CompareFieldsValidation', () => {
       [field]: faker.random.word(),
       [fieldToCompare]: faker.random.word()
     })
-    expect(error).toEqual(new InvalidFieldError())
+    expect(error).toEqual(new InvalidCompareFieldError())
   })
 
   test('should return falsy if compare is valid', () => {

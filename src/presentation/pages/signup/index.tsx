@@ -34,22 +34,42 @@ const Signup: React.FC<Props> = ({
     email: '',
     password: '',
     passwordConfirmation: '',
-    emailError: '',
     errorMessage: '',
     invalidForm: true
+  })
+
+  const [stateError, setStateError] = useState({
+    nameError: '',
+    emailError: '',
+    passwordError: '',
+    passwordConfirmationError: ''
   })
 
   useEffect(() => {
     const { name, email, password, passwordConfirmation } = state
     const formData = { name, email, password, passwordConfirmation }
+    const nameError = validation.validade('name', formData)
     const emailError = validation.validade('email', formData)
     const passwordError = validation.validade('password', formData)
+    const passwordConfirmationError = validation.validade(
+      'passwordConfirmation',
+      formData
+    )
 
     setState({
       ...state,
-      invalidForm: !!emailError || !!passwordError
+      invalidForm:
+        !!nameError || !!emailError || !!passwordError || !!passwordConfirmationError
     })
-  }, [state.email, state.password])
+
+    setStateError({
+      ...stateError,
+      nameError,
+      emailError,
+      passwordError,
+      passwordConfirmationError
+    })
+  }, [state.name, state.email, state.password, state.passwordConfirmation])
 
   const handleSubmit = async (
     event: React.FormEvent<HTMLFormElement>
@@ -85,13 +105,27 @@ const Signup: React.FC<Props> = ({
             onSubmit={handleSubmit}
             data-testid='signup-form'
           >
-            <Input name='name' placeholder='Digite seu nome' />
-            <Input name='email' placeholder='Digite seu e-mail' />
-            <Input type='password' name='password' placeholder='Digite sua senha' />
+            <Input
+              name='name'
+              placeholder='Digite seu nome'
+              errorMsg={stateError.nameError}
+            />
+            <Input
+              name='email'
+              placeholder='Digite seu e-mail'
+              errorMsg={stateError.emailError}
+            />
+            <Input
+              type='password'
+              name='password'
+              placeholder='Digite sua senha'
+              errorMsg={stateError.passwordError}
+            />
             <Input
               type='password'
               name='passwordConfirmation'
               placeholder='Repita sua senha'
+              errorMsg={stateError.passwordConfirmationError}
             />
             <SubmitButton text='Cadastrar' />
           </FormLogin>
