@@ -1,3 +1,5 @@
+import faker from 'faker'
+
 describe('Login', () => {
   beforeEach(() => {
     cy.visit('login')
@@ -7,5 +9,11 @@ describe('Login', () => {
     cy.getByTestId('email').should('be.empty')
     cy.getByTestId('password').should('be.empty')
     cy.getByTestId('status-wrap').should('not.have.descendants')
+  })
+  it('should present error state if form is invalid', () => {
+    cy.getByTestId('email').type(faker.random.word())
+    cy.getByTestId('password').type(faker.random.alphaNumeric(3))
+    cy.getByTestId('status-wrap').should('not.have.descendants')
+    cy.getByTestId('submit-button').should('be.disabled')
   })
 })
