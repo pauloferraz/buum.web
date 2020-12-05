@@ -8,6 +8,7 @@ type Props = React.DetailedHTMLProps<
   HTMLInputElement
 > & {
   errorMsg?: string
+  label?: string
 }
 
 const Input: React.FC<Props> = ({ errorMsg, ...props }: Props) => {
@@ -22,8 +23,11 @@ const Input: React.FC<Props> = ({ errorMsg, ...props }: Props) => {
 
   return (
     <InputWrap>
+      <div>
+        <label htmlFor={props.name}>{props.label}</label>
+        <ErrorMsg data-testid={`${props.name}Error`}>{errorMsg}</ErrorMsg>
+      </div>
       <input {...props} data-testid={props.name} onChange={handleChange} />
-      <ErrorMsg data-testid={`${props.name}Error`}>{errorMsg}</ErrorMsg>
     </InputWrap>
   )
 }

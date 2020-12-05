@@ -107,22 +107,26 @@ const Signup: React.FC<Props> = ({
           >
             <Input
               name='name'
+              label='Nome'
               placeholder='Digite seu nome'
               errorMsg={stateError.nameError}
             />
             <Input
               name='email'
+              label='E-mail'
               placeholder='Digite seu e-mail'
               errorMsg={stateError.emailError}
             />
             <Input
               type='password'
               name='password'
+              label='Senha'
               placeholder='Digite sua senha'
               errorMsg={stateError.passwordError}
             />
             <Input
               type='password'
+              label='Confirme a senha'
               name='passwordConfirmation'
               placeholder='Repita sua senha'
               errorMsg={stateError.passwordConfirmationError}

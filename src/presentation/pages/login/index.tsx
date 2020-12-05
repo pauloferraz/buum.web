@@ -82,8 +82,13 @@ const Login: React.FC<Props> = ({
             onSubmit={handleSubmit}
             data-testid='login-form'
           >
-            <Input name='email' placeholder='Digite seu e-mail' />
-            <Input type='password' name='password' placeholder='Digite sua senha' />
+            <Input name='email' placeholder='Digite seu e-mail' label='Email' />
+            <Input
+              type='password'
+              name='password'
+              placeholder='Digite sua senha'
+              label='Senha'
+            />
             <SubmitButton text='Entrar' />
           </FormLogin>
           <LinkCreate>
