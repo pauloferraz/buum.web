@@ -3,6 +3,7 @@ import { Link, useHistory } from 'react-router-dom'
 import FormStatus from '@/presentation/components/form-status'
 import Input from '@/presentation/components/input'
 import SubmitButton from '@/presentation/components/submit-button'
+import Logo from '@/presentation/components/logo'
 import Context from '@/presentation/contexts/form-context'
 import { Validation } from '@/presentation/protocols/validation'
 import { AddAccount, SaveAccessToken } from '@/domain/usecases'
@@ -96,6 +97,7 @@ const Signup: React.FC<Props> = ({
 
   return (
     <Container>
+      <Logo />
       <LoginContainer>
         <Context.Provider value={{ state, setState }}>
           <Title>Portal do vendedor</Title>
