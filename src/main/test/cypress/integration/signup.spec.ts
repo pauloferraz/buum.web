@@ -22,4 +22,17 @@ describe('Signup', () => {
     cy.getByTestId('status-wrap').should('not.have.descendants')
     cy.getByTestId('submit-button').should('be.disabled')
   })
+
+  it('should present error state if passwordConfirmation is invalid', () => {
+    cy.getByTestId('name').type(faker.random.words())
+    cy.getByTestId('email').type(faker.internet.email())
+    cy.getByTestId('password').type(faker.random.alphaNumeric(6))
+    cy.getByTestId('passwordConfirmation').type(faker.random.alphaNumeric(6))
+    cy.getByTestId('status-wrap').should('not.have.descendants')
+    cy.getByTestId('submit-button').should('be.disabled')
+    cy.getByTestId('passwordConfirmationError').should(
+      'contain.text',
+      'Senhas não conferem'
+    )
+  })
 })
