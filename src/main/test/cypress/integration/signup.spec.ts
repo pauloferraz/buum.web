@@ -1,4 +1,5 @@
 import faker from 'faker'
+import { simulateValidSignup } from '../support/support-helper'
 
 const baseUrl: string = Cypress.config('baseUrl')
 
@@ -42,12 +43,7 @@ describe('Signup', () => {
     cy.intercept('POST', '/signup', {
       statusCode: 403
     })
-    const pass = faker.random.alphaNumeric(6)
-    cy.getByTestId('name').type(faker.random.words())
-    cy.getByTestId('email').type(faker.internet.email())
-    cy.getByTestId('password').type(pass)
-    cy.getByTestId('passwordConfirmation').type(pass)
-    cy.getByTestId('submit-button').click()
+    simulateValidSignup()
     cy.getByTestId('status-wrap')
       .getByTestId('spinner')
       .should('not.exist')
@@ -61,15 +57,24 @@ describe('Signup', () => {
     cy.intercept('POST', '/signup', {
       statusCode: 200
     })
-    cy.getByTestId('name').type(faker.random.words())
-    cy.getByTestId('email').type(faker.internet.email())
-    const pass = faker.random.alphaNumeric(6)
-    cy.getByTestId('password').type(pass)
-    cy.getByTestId('passwordConfirmation').type(pass)
-    cy.getByTestId('submit-button').click()
+    simulateValidSignup()
     cy.url().should('eq', `${baseUrl}/`)
     cy.window().then(window =>
       assert.isOk(window.localStorage.getItem('accessToken'))
     )
+  })
+
+  it('should present UnexpectedError on default error cases', () => {
+    cy.intercept('POST', '/signup', {
+      statusCode: 400
+    })
+    simulateValidSignup()
+    cy.getByTestId('status-wrap')
+      .getByTestId('spinner')
+      .should('not.exist')
+      .getByTestId('main-error')
+      .should('exist')
+      .should('contain.text', 'Algo de errado aconteceu. Tente novamente em breve.')
+    cy.url().should('eq', `${baseUrl}/signup`)
   })
 })
