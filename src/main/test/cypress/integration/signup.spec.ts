@@ -56,4 +56,20 @@ describe('Signup', () => {
       .should('contain.text', 'Esse e-mail já está em uso')
     cy.url().should('eq', `${baseUrl}/signup`)
   })
+
+  it('should present save accessToken if valid credencials', () => {
+    cy.intercept('POST', '/signup', {
+      statusCode: 200
+    })
+    cy.getByTestId('name').type(faker.random.words())
+    cy.getByTestId('email').type(faker.internet.email())
+    const pass = faker.random.alphaNumeric(6)
+    cy.getByTestId('password').type(pass)
+    cy.getByTestId('passwordConfirmation').type(pass)
+    cy.getByTestId('submit-button').click()
+    cy.url().should('eq', `${baseUrl}/`)
+    cy.window().then(window =>
+      assert.isOk(window.localStorage.getItem('accessToken'))
+    )
+  })
 })
