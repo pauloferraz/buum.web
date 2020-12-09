@@ -1,5 +1,7 @@
 import faker from 'faker'
 
+const baseUrl: string = Cypress.config('baseUrl')
+
 describe('Signup', () => {
   beforeEach(() => {
     cy.visit('signup')
@@ -34,5 +36,24 @@ describe('Signup', () => {
       'contain.text',
       'Senhas não conferem'
     )
+  })
+
+  it('should present error if email already exists', () => {
+    cy.intercept('POST', '/signup', {
+      statusCode: 403
+    })
+    const pass = faker.random.alphaNumeric(6)
+    cy.getByTestId('name').type(faker.random.words())
+    cy.getByTestId('email').type(faker.internet.email())
+    cy.getByTestId('password').type(pass)
+    cy.getByTestId('passwordConfirmation').type(pass)
+    cy.getByTestId('submit-button').click()
+    cy.getByTestId('status-wrap')
+      .getByTestId('spinner')
+      .should('not.exist')
+      .getByTestId('main-error')
+      .should('exist')
+      .should('contain.text', 'Esse e-mail já está em uso')
+    cy.url().should('eq', `${baseUrl}/signup`)
   })
 })
