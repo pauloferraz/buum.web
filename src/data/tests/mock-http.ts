@@ -13,6 +13,10 @@ export const makePostRequest = (): HttpPostParams => ({
   body: faker.random.objectElement()
 })
 
+export const makeGetRequest = (): HttpGetParams => ({
+  url: faker.internet.url()
+})
+
 export class HttpPostClientSpy<R> implements HttpPostClient<R> {
   url?: string
   body?: any
