@@ -11,8 +11,12 @@ const GlobalStyle = createGlobalStyle`
   -webkit-font-smoothing: antialiased;
 }
 
+*:focus, *:active{
+  outline:none;
+}
+
   body {
-    background:${props => props.theme.colors.grey};
+    background:${props => props.theme.colors.white};
   }
 
   h1, h2, h3, h4, h5, h6 {
