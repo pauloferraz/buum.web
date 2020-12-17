@@ -16,7 +16,7 @@ import {
   AddAccountSpy,
   ValidationStub,
   Helper,
-  SaveAccessTokenMock
+  UpdateCurrentAccountMock
 } from '@/presentation/test'
 import { EmailInUseError } from '@/domain/errors'
 
@@ -24,26 +24,26 @@ type SutTypes = {
   sut: RenderResult
   validationStub: ValidationStub
   addAccountSpy: AddAccountSpy
-  saveAccessTokenMock: SaveAccessTokenMock
+  updateCurrentAccountMock: UpdateCurrentAccountMock
 }
 
 const history = createMemoryHistory({ initialEntries: ['/signup'] })
 const makeSut = (): SutTypes => {
   const validationStub = new ValidationStub()
   const addAccountSpy = new AddAccountSpy()
-  const saveAccessTokenMock = new SaveAccessTokenMock()
+  const updateCurrentAccountMock = new UpdateCurrentAccountMock()
   const sut = render(
     <Router history={history}>
       <ThemeProvider theme={light}>
         <Signup
           validation={validationStub}
           addAccount={addAccountSpy}
-          saveAccessToken={saveAccessTokenMock}
+          updateCurrentAccount={updateCurrentAccountMock}
         />
       </ThemeProvider>
     </Router>
   )
-  return { sut, validationStub, addAccountSpy, saveAccessTokenMock }
+  return { sut, validationStub, addAccountSpy, updateCurrentAccountMock }
 }
 
 const simulateValidSubmit = async (
@@ -142,12 +142,10 @@ describe('Signup component', () => {
     expect(statusWrap.childElementCount).toBe(1)
   })
 
-  test('should call SaveAccessToken on success', async () => {
-    const { sut, addAccountSpy, saveAccessTokenMock } = makeSut()
+  test('should call updateCurrentAccount on success', async () => {
+    const { sut, addAccountSpy, updateCurrentAccountMock } = makeSut()
     await simulateValidSubmit(sut)
-    expect(saveAccessTokenMock.accessToken).toEqual(
-      addAccountSpy.account.accessToken
-    )
+    expect(updateCurrentAccountMock.account).toEqual(addAccountSpy.account)
     expect(history.length).toBe(1)
     expect(history.location.pathname).toBe('/')
   })

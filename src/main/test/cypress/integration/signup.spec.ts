@@ -59,9 +59,7 @@ describe('Signup', () => {
     })
     simulateValidSignup()
     cy.url().should('eq', `${baseUrl}/`)
-    cy.window().then(window =>
-      assert.isOk(window.localStorage.getItem('accessToken'))
-    )
+    cy.window().then(window => assert.isOk(window.localStorage.getItem('account')))
   })
 
   it('should present UnexpectedError on default error cases', () => {

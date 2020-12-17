@@ -2,14 +2,20 @@ import React from 'react'
 import { Router } from 'react-router-dom'
 import { createMemoryHistory } from 'history'
 import faker from 'faker'
-import { render, RenderResult, fireEvent, cleanup, waitFor } from '@testing-library/react'
+import {
+  render,
+  RenderResult,
+  fireEvent,
+  cleanup,
+  waitFor
+} from '@testing-library/react'
 import { ThemeProvider } from 'styled-components'
 import light from '@/presentation/theme/light'
 import Login from '.'
 import {
   ValidationStub,
   AuthenticationSpy,
-  SaveAccessTokenMock,
+  UpdateCurrentAccountMock,
   Helper
 } from '@/presentation/test'
 import { InvalidCredencialError } from '@/domain/errors'
@@ -18,26 +24,26 @@ type SutTypes = {
   sut: RenderResult
   validationStub: ValidationStub
   authenticationSpy: AuthenticationSpy
-  saveAccessTokenMock: SaveAccessTokenMock
+  updateCurrentAccountMock: UpdateCurrentAccountMock
 }
 
 const history = createMemoryHistory({ initialEntries: ['/login'] })
 const makeSut = (): SutTypes => {
   const validationStub = new ValidationStub()
   const authenticationSpy = new AuthenticationSpy()
-  const saveAccessTokenMock = new SaveAccessTokenMock()
+  const updateCurrentAccountMock = new UpdateCurrentAccountMock()
   const sut = render(
     <Router history={history}>
       <ThemeProvider theme={light}>
         <Login
           validation={validationStub}
           authentication={authenticationSpy}
-          saveAccessToken={saveAccessTokenMock}
+          updateCurrentAccount={updateCurrentAccountMock}
         />
       </ThemeProvider>
     </Router>
   )
-  return { sut, validationStub, authenticationSpy, saveAccessTokenMock }
+  return { sut, validationStub, authenticationSpy, updateCurrentAccountMock }
 }
 
 const simulateValidSubmit = async (
@@ -111,9 +117,7 @@ describe('Login Component', () => {
   test('should present error if Authentication fails', async () => {
     const { sut, authenticationSpy } = makeSut()
     const error = new InvalidCredencialError()
-    jest
-      .spyOn(authenticationSpy, 'auth')
-      .mockReturnValueOnce(Promise.reject(error))
+    jest.spyOn(authenticationSpy, 'auth').mockReturnValueOnce(Promise.reject(error))
     await simulateValidSubmit(sut)
     const statusWrap = sut.getByTestId('status-wrap')
     const mainError = sut.getByTestId('main-error')
@@ -121,12 +125,10 @@ describe('Login Component', () => {
     expect(statusWrap.childElementCount).toBe(1)
   })
 
-  test('should call SaveAccessToken on success', async () => {
-    const { sut, authenticationSpy, saveAccessTokenMock } = makeSut()
+  test('should call updateCurrentAccount on success', async () => {
+    const { sut, authenticationSpy, updateCurrentAccountMock } = makeSut()
     await simulateValidSubmit(sut)
-    expect(saveAccessTokenMock.accessToken).toEqual(
-      authenticationSpy.account.accessToken
-    )
+    expect(updateCurrentAccountMock.account).toEqual(authenticationSpy.account)
     expect(history.length).toBe(1)
     expect(history.location.pathname).toBe('/')
   })

@@ -6,7 +6,7 @@ import SubmitButton from '@/presentation/components/submit-button'
 import Logo from '@/presentation/components/logo'
 import Context from '@/presentation/contexts/form-context'
 import { Validation } from '@/presentation/protocols/validation'
-import { Authentication, SaveAccessToken } from '@/domain/usecases'
+import { Authentication, UpdateCurrentAccount } from '@/domain/usecases'
 
 import {
   Container,
@@ -20,13 +20,13 @@ import {
 type Props = {
   validation: Validation
   authentication: Authentication
-  saveAccessToken: SaveAccessToken
+  updateCurrentAccount: UpdateCurrentAccount
 }
 
 const Login: React.FC<Props> = ({
   validation,
   authentication,
-  saveAccessToken
+  updateCurrentAccount
 }: Props) => {
   const history = useHistory()
   const [state, setState] = useState({
@@ -65,7 +65,7 @@ const Login: React.FC<Props> = ({
         email: state.email,
         password: state.password
       })
-      await saveAccessToken.save(account.accessToken)
+      await updateCurrentAccount.save(account)
       history.replace('/')
     } catch (error) {
       setState({ ...state, isLoading: false, errorMessage: error.message })
