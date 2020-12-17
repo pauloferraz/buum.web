@@ -79,14 +79,12 @@ export const SidebarItem = styled.li<PropsItem>`
   button {
     color: ${props =>
       props.active ? props.theme.colors.white : props.theme.colors.black};
-    transition: all 0.5s;
 
     svg {
       margin-right: 16px;
       stroke: ${props =>
         props.active ? props.theme.colors.white : props.theme.colors.black};
       stroke-width: 1.5;
-      transition: all 0.5s;
     }
   }
 `

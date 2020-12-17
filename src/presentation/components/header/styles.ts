@@ -3,7 +3,6 @@ import styled from 'styled-components'
 export const HeaderWrap = styled.div`
   width: 100%;
   display: flex;
-  margin: 0 -16px;
   padding: 40px 0;
 `
 
@@ -29,4 +28,15 @@ export const HeaderTitle = styled.h2`
   line-height: 1.5;
   font-weight: 600;
   letter-spacing: -1px;
+`
+export const ButtonLogout = styled.button`
+  background: unset;
+  border: unset;
+  cursor: pointer;
+
+  &:hover {
+    svg {
+      stroke: ${props => props.theme.colors.accent_1};
+    }
+  }
 `

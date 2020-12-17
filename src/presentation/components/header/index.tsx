@@ -1,5 +1,5 @@
 import React from 'react'
-import { HeaderWrap, Column, HeaderName, HeaderTitle } from './styles'
+import { HeaderWrap, Column, HeaderName, HeaderTitle, ButtonLogout } from './styles'
 
 import { FiLogOut } from 'react-icons/fi'
 
@@ -11,7 +11,9 @@ const Header: React.FC = () => {
         <HeaderTitle>Bem vindo! 👋</HeaderTitle>
       </Column>
       <Column textAlign='end'>
-        <FiLogOut size={20} />
+        <ButtonLogout>
+          <FiLogOut size={20} />
+        </ButtonLogout>
       </Column>
     </HeaderWrap>
   )
