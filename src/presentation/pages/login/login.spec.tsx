@@ -12,38 +12,33 @@ import {
 import { ThemeProvider } from 'styled-components'
 import light from '@/presentation/theme/light'
 import Login from '.'
-import {
-  ValidationStub,
-  AuthenticationSpy,
-  UpdateCurrentAccountMock,
-  Helper
-} from '@/presentation/test'
+import { ValidationStub, AuthenticationSpy, Helper } from '@/presentation/test'
 import { InvalidCredencialError } from '@/domain/errors'
+import { ApiContext } from '@/presentation/contexts'
+import { AccountModel } from '@/domain/models'
 
 type SutTypes = {
   sut: RenderResult
   validationStub: ValidationStub
   authenticationSpy: AuthenticationSpy
-  updateCurrentAccountMock: UpdateCurrentAccountMock
+  setCurrentAccountMock: (account: AccountModel) => void
 }
 
 const history = createMemoryHistory({ initialEntries: ['/login'] })
 const makeSut = (): SutTypes => {
   const validationStub = new ValidationStub()
   const authenticationSpy = new AuthenticationSpy()
-  const updateCurrentAccountMock = new UpdateCurrentAccountMock()
+  const setCurrentAccountMock = jest.fn()
   const sut = render(
-    <Router history={history}>
-      <ThemeProvider theme={light}>
-        <Login
-          validation={validationStub}
-          authentication={authenticationSpy}
-          updateCurrentAccount={updateCurrentAccountMock}
-        />
-      </ThemeProvider>
-    </Router>
+    <ApiContext.Provider value={{ setCurrentAccount: setCurrentAccountMock }}>
+      <Router history={history}>
+        <ThemeProvider theme={light}>
+          <Login validation={validationStub} authentication={authenticationSpy} />
+        </ThemeProvider>
+      </Router>
+    </ApiContext.Provider>
   )
-  return { sut, validationStub, authenticationSpy, updateCurrentAccountMock }
+  return { sut, validationStub, authenticationSpy, setCurrentAccountMock }
 }
 
 const simulateValidSubmit = async (
@@ -126,9 +121,9 @@ describe('Login Component', () => {
   })
 
   test('should call updateCurrentAccount on success', async () => {
-    const { sut, authenticationSpy, updateCurrentAccountMock } = makeSut()
+    const { sut, authenticationSpy, setCurrentAccountMock } = makeSut()
     await simulateValidSubmit(sut)
-    expect(updateCurrentAccountMock.account).toEqual(authenticationSpy.account)
+    expect(setCurrentAccountMock).toHaveBeenCalledWith(authenticationSpy.account)
     expect(history.length).toBe(1)
     expect(history.location.pathname).toBe('/')
   })

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/indent */
 import React, { useContext } from 'react'
-import Context from '@/presentation/contexts/form-context'
+import { FormContext } from '@/presentation/contexts'
 import { InputWrap, ErrorMsg } from './styles'
 
 type Props = React.DetailedHTMLProps<
@@ -12,7 +12,7 @@ type Props = React.DetailedHTMLProps<
 }
 
 const Input: React.FC<Props> = ({ errorMsg, ...props }: Props) => {
-  const { state, setState } = useContext(Context)
+  const { state, setState } = useContext(FormContext)
 
   const handleChange = (event: React.FocusEvent<HTMLInputElement>): void => {
     setState({

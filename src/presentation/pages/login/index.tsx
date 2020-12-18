@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import FormStatus from '@/presentation/components/form-status'
 import Input from '@/presentation/components/input'
 import SubmitButton from '@/presentation/components/submit-button'
 import Logo from '@/presentation/components/logo'
-import Context from '@/presentation/contexts/form-context'
+import { FormContext, ApiContext } from '@/presentation/contexts'
 import { Validation } from '@/presentation/protocols/validation'
-import { Authentication, UpdateCurrentAccount } from '@/domain/usecases'
+import { Authentication } from '@/domain/usecases'
 
 import {
   Container,
@@ -20,14 +20,10 @@ import {
 type Props = {
   validation: Validation
   authentication: Authentication
-  updateCurrentAccount: UpdateCurrentAccount
 }
 
-const Login: React.FC<Props> = ({
-  validation,
-  authentication,
-  updateCurrentAccount
-}: Props) => {
+const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
+  const { setCurrentAccount } = useContext(ApiContext)
   const history = useHistory()
   const [state, setState] = useState({
     isLoading: false,
@@ -65,7 +61,7 @@ const Login: React.FC<Props> = ({
         email: state.email,
         password: state.password
       })
-      await updateCurrentAccount.save(account)
+      setCurrentAccount(account)
       history.replace('/')
     } catch (error) {
       setState({ ...state, isLoading: false, errorMessage: error.message })
@@ -76,7 +72,7 @@ const Login: React.FC<Props> = ({
     <Container>
       <Logo />
       <LoginContainer>
-        <Context.Provider value={{ state, setState }}>
+        <FormContext.Provider value={{ state, setState }}>
           <Title>Portal do vendedor</Title>
           <SubTitle>Gerencie sua loja de forma fácil e rápida</SubTitle>
           <FormLogin
@@ -102,7 +98,7 @@ const Login: React.FC<Props> = ({
             e comece a vender.
           </LinkCreate>
           <FormStatus />
-        </Context.Provider>
+        </FormContext.Provider>
       </LoginContainer>
     </Container>
   )

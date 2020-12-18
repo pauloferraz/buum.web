@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import Context from '@/presentation/contexts/form-context'
+import { FormContext } from '@/presentation/contexts'
 import { Button } from './styles'
 
 type Props = {
@@ -7,7 +7,7 @@ type Props = {
 }
 
 const SubmitButton: React.FC<Props> = ({ text }: Props) => {
-  const { state } = useContext(Context)
+  const { state } = useContext(FormContext)
 
   return (
     <Button type='submit' disabled={state.invalidForm} data-testid='submit-button'>

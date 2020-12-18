@@ -1,10 +1,10 @@
 import React, { useContext } from 'react'
 import ScaleLoader from 'react-spinners/ScaleLoader'
-import Context from '@/presentation/contexts/form-context'
+import { FormContext } from '@/presentation/contexts'
 import { Container, TextError } from './styles'
 
 const FormStatus: React.FC = () => {
-  const { state } = useContext(Context)
+  const { state } = useContext(FormContext)
   const { isLoading, errorMessage } = state
 
   return (
