@@ -4,3 +4,7 @@ import { makeLocalStorageAdapter } from '@/main/factories/cache/local-storage-ad
 export const setCurrentAccountAdapter = (account: AccountModel): void => {
   makeLocalStorageAdapter().set('account', account)
 }
+
+export const getCurrentAccountAdapter = (): AccountModel => {
+  return makeLocalStorageAdapter().get('account')
+}
