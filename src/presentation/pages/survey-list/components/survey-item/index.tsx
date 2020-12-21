@@ -20,7 +20,9 @@ const SurveyItem: React.FC<Props> = ({ survey }: Props) => {
         <SurveyDateMini data-testid='month'>
           {survey.date.toLocaleString('pt-BR', { month: 'short' }).replace('.', '')}
         </SurveyDateMini>
-        <SurveyDateText data-testid='day'>{survey.date.getDate()}</SurveyDateText>
+        <SurveyDateText data-testid='day'>
+          {survey.date.getDate().toString().padStart(2, '0')}
+        </SurveyDateText>
         <SurveyDateMini data-testid='year'>
           {survey.date.getFullYear()}
         </SurveyDateMini>
