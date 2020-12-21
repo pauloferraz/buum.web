@@ -48,11 +48,7 @@ const simulateValidSubmit = async (
 describe('Login Component', () => {
   test('should start with initial state', () => {
     makeSut()
-    const statusWrap = screen.getByTestId('status-wrap')
-    expect(statusWrap.childElementCount).toBe(0)
-
-    /* const submitButton = screen.getByTestId('submit-button') as HTMLButtonElement
-    expect(submitButton.disabled).toBeTruthy() */
+    expect(screen.getByTestId('status-wrap').children).toHaveLength(0)
   })
 
   test('should show email valid password state if Validation succeeds', () => {
@@ -68,16 +64,15 @@ describe('Login Component', () => {
     validationStub.errorMessage = null
     Helper.populateField('email', faker.internet.email())
     Helper.populateField('password', faker.internet.password())
-    const submitBtn = screen.getByTestId('submit-button') as HTMLButtonElement
-    expect(submitBtn.disabled).toBe(false)
+    expect(screen.getByTestId('submit-button')).toBeEnabled()
   })
 
   test('should enable spinner on form submit', async () => {
     const { validationStub } = makeSut()
     validationStub.errorMessage = null
     await simulateValidSubmit()
-    const spinner = screen.getByTestId('status-wrap')
-    expect(spinner).toBeTruthy()
+    const spinner = screen.queryByTestId('status-wrap')
+    expect(spinner).toBeInTheDocument()
   })
 
   test('should call Authentication with correct values', async () => {
@@ -104,10 +99,8 @@ describe('Login Component', () => {
     const error = new InvalidCredencialError()
     jest.spyOn(authenticationSpy, 'auth').mockReturnValueOnce(Promise.reject(error))
     await simulateValidSubmit()
-    const statusWrap = screen.getByTestId('status-wrap')
-    const mainError = screen.getByTestId('main-error')
-    expect(mainError.textContent).toBe(error.message)
-    expect(statusWrap.childElementCount).toBe(1)
+    expect(screen.getByTestId('main-error')).toHaveTextContent(error.message)
+    expect(screen.getByTestId('status-wrap').children).toHaveLength(1)
   })
 
   test('should call updateCurrentAccount on success', async () => {
