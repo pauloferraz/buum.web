@@ -1,18 +1,14 @@
 import React from 'react'
 import Sidebar from '@/presentation/components/sidebar'
 import Header from '@/presentation/components/header'
+import { SurveyItem, SurveyItemEmpty } from './components'
 
 import {
   PageWrap,
   PageContent,
   PageTitle,
   SurveyWrap,
-  SurveyContent,
-  SurveyItem,
-  SurveyDate,
-  SurveyDateMini,
-  SurveyDateText,
-  SurveyTitle
+  SurveyContent
 } from './styles'
 
 const SurveyList: React.FC = () => {
@@ -25,14 +21,7 @@ const SurveyList: React.FC = () => {
           <SurveyWrap>
             <PageTitle>Minhas Enquetes</PageTitle>
             <SurveyContent>
-              <SurveyItem>
-                <SurveyDate>
-                  <SurveyDateMini>nov</SurveyDateMini>
-                  <SurveyDateText>23</SurveyDateText>
-                  <SurveyDateMini>2020</SurveyDateMini>
-                </SurveyDate>
-                <SurveyTitle>Qual seu framework favorito?</SurveyTitle>
-              </SurveyItem>
+              <SurveyItemEmpty />
               <SurveyItem />
             </SurveyContent>
           </SurveyWrap>
