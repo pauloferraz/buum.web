@@ -1,3 +1,4 @@
+import { SurveyModel } from '@/domain/models'
 import React from 'react'
 
 import {
@@ -8,15 +9,23 @@ import {
   SurveyTitle
 } from './styles'
 
-const SurveyItem: React.FC = () => {
+type Props = {
+  survey: SurveyModel
+}
+
+const SurveyItem: React.FC<Props> = ({ survey }: Props) => {
   return (
     <SurveyItemWrap>
       <SurveyDate>
-        <SurveyDateMini>nov</SurveyDateMini>
-        <SurveyDateText>23</SurveyDateText>
-        <SurveyDateMini>2020</SurveyDateMini>
+        <SurveyDateMini data-testid='month'>
+          {survey.date.toLocaleString('pt-BR', { month: 'short' }).replace('.', '')}
+        </SurveyDateMini>
+        <SurveyDateText data-testid='day'>{survey.date.getDate()}</SurveyDateText>
+        <SurveyDateMini data-testid='year'>
+          {survey.date.getFullYear()}
+        </SurveyDateMini>
       </SurveyDate>
-      <SurveyTitle>Qual seu framework favorito?</SurveyTitle>
+      <SurveyTitle data-testid='question'>{survey.question}</SurveyTitle>
     </SurveyItemWrap>
   )
 }
