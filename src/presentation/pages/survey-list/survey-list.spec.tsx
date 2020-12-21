@@ -4,13 +4,17 @@ import { ThemeProvider } from 'styled-components'
 import light from '@/presentation/theme/light'
 import SurveyList from '.'
 
+const makeSut = (): void => {
+  render(
+    <ThemeProvider theme={light}>
+      <SurveyList />
+    </ThemeProvider>
+  )
+}
+
 describe('SurveyList Page', () => {
   test('Should present 4 items empty on start', () => {
-    render(
-      <ThemeProvider theme={light}>
-        <SurveyList />
-      </ThemeProvider>
-    )
+    makeSut()
     const surveyList = screen.getByTestId('survey-content')
     expect(surveyList.querySelectorAll('div').length).toBe(4)
   })
