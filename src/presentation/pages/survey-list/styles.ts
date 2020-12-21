@@ -8,8 +8,8 @@ export const PageWrap = styled.div`
   -webkit-transition: all 0.25s;
   -o-transition: all 0.25s;
   transition: all 0.25s;
-  height: 100vh;
-  background: ${props => props.theme.colors.grey};
+  min-height: 100vh;
+  background: ${props => props.theme.colors.grey_light};
 `
 
 export const PageContent = styled.div`

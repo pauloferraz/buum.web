@@ -8,6 +8,7 @@ export default {
     alert: '#FF754C',
     white: '#fff',
     black: '#1b1d21',
-    grey: '#f7f8f9'
+    grey_light: '#f7f8f9',
+    grey_dark: '#808191'
   }
 }

@@ -13,8 +13,8 @@ export const InputWrap = styled.div`
   }
   input {
     line-height: 40px;
-    background: ${props => props.theme.colors.grey};
-    border: 1px solid ${props => props.theme.colors.grey};
+    background: ${props => props.theme.colors.grey_light};
+    border: 1px solid ${props => props.theme.colors.grey_light};
     margin-top: 2px;
     margin-bottom: 12px;
     padding: 0px 10px;
