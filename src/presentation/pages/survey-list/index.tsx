@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { LoadSurveyList } from '@/domain/usecases/load-survey-list'
+
 import Sidebar from '@/presentation/components/sidebar'
 import Header from '@/presentation/components/header'
 import { SurveyItemEmpty } from '@/presentation/pages/survey-list/components'
@@ -11,7 +13,15 @@ import {
   SurveyContent
 } from './styles'
 
-const SurveyList: React.FC = () => {
+type Props = {
+  loadSurveyList: LoadSurveyList
+}
+
+const SurveyList: React.FC<Props> = ({ loadSurveyList }: Props) => {
+  useEffect(() => {
+    loadSurveyList.loadAll()
+  }, [])
+
   return (
     <>
       <Sidebar />
