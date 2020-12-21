@@ -1,7 +1,7 @@
 import React from 'react'
 import Sidebar from '@/presentation/components/sidebar'
 import Header from '@/presentation/components/header'
-import { SurveyItem, SurveyItemEmpty } from './components'
+import { SurveyItemEmpty } from '@/presentation/pages/survey-list/components'
 
 import {
   PageWrap,
@@ -20,9 +20,8 @@ const SurveyList: React.FC = () => {
           <Header />
           <SurveyWrap>
             <PageTitle>Minhas Enquetes</PageTitle>
-            <SurveyContent>
+            <SurveyContent data-testid='survey-content'>
               <SurveyItemEmpty />
-              <SurveyItem />
             </SurveyContent>
           </SurveyWrap>
         </PageContent>
