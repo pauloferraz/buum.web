@@ -5,15 +5,20 @@ import light from '@/presentation/theme/light'
 import SurveyItem from '.'
 import { mockSurveyModel } from '@/domain/test'
 
+const makeSut = (survey = mockSurveyModel()): void => {
+  render(
+    <ThemeProvider theme={light}>
+      <SurveyItem survey={survey} />
+    </ThemeProvider>
+  )
+}
+
 describe('SurveyList Page', () => {
   test('Should render correct values', () => {
-    const survey = mockSurveyModel()
-    survey.date = new Date('2020-01-10T00:00:00')
-    render(
-      <ThemeProvider theme={light}>
-        <SurveyItem survey={survey} />
-      </ThemeProvider>
-    )
+    const survey = Object.assign(mockSurveyModel(), {
+      date: new Date('2020-01-10T00:00:00')
+    })
+    makeSut(survey)
     expect(screen.getByTestId('question')).toHaveTextContent(survey.question)
     expect(screen.getByTestId('day')).toHaveTextContent('10')
     expect(screen.getByTestId('month')).toHaveTextContent('jan')
