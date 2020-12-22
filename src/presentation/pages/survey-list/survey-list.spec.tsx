@@ -1,16 +1,19 @@
 import React from 'react'
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import { ThemeProvider } from 'styled-components'
 import light from '@/presentation/theme/light'
 import SurveyList from '.'
 import { LoadSurveyList } from '@/domain/usecases/load-survey-list'
 import { SurveyModel } from '@/domain/models'
+import { mockSurveyListModel } from '@/domain/test'
 
 class LoadSurveyListSpy implements LoadSurveyList {
   callsCount = 0
+  surveys = mockSurveyListModel()
+
   async loadAll(): Promise<SurveyModel[]> {
     this.callsCount++
-    return []
+    return this.surveys
   }
 }
 
@@ -31,14 +34,21 @@ const makeSut = (): SutTypes => {
 }
 
 describe('SurveyList Page', () => {
-  test('Should present 4 items empty on start', () => {
+  test('Should present 4 items empty on start', async () => {
     makeSut()
-    const surveyList = screen.getByTestId('survey-content')
-    expect(surveyList.querySelectorAll('div').length).toBe(4)
+    expect(screen.getAllByTestId('survey-item-empty')).toHaveLength(4)
+    await waitFor(() => screen.getByTestId('survey-content'))
   })
 
-  test('Should call LoadSurveyList', () => {
+  test('Should call LoadSurveyList', async () => {
     const { loadSurveyListSpy } = makeSut()
     expect(loadSurveyListSpy.callsCount).toBe(1)
+    await waitFor(() => screen.getByTestId('survey-content'))
+  })
+
+  test('Should render SurveyItems on success', async () => {
+    makeSut()
+    await waitFor(() => screen.getByTestId('survey-content'))
+    expect(screen.getAllByTestId('survey-item')).toHaveLength(3)
   })
 })
