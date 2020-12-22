@@ -15,7 +15,7 @@ type Props = {
 
 const SurveyItem: React.FC<Props> = ({ survey }: Props) => {
   return (
-    <SurveyItemWrap>
+    <SurveyItemWrap data-testid='survey-item'>
       <SurveyDate>
         <SurveyDateMini data-testid='month'>
           {survey.date.toLocaleString('pt-BR', { month: 'short' }).replace('.', '')}

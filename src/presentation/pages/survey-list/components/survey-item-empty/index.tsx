@@ -5,10 +5,10 @@ import { SurveyItemEmptyWrap } from './styles'
 const SurveyItemEmpty: React.FC = () => {
   return (
     <>
-      <SurveyItemEmptyWrap />
-      <SurveyItemEmptyWrap />
-      <SurveyItemEmptyWrap />
-      <SurveyItemEmptyWrap />
+      <SurveyItemEmptyWrap data-testid='survey-item-empty' />
+      <SurveyItemEmptyWrap data-testid='survey-item-empty' />
+      <SurveyItemEmptyWrap data-testid='survey-item-empty' />
+      <SurveyItemEmptyWrap data-testid='survey-item-empty' />
     </>
   )
 }
