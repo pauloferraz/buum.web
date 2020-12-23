@@ -6,6 +6,7 @@ import SurveyList from '.'
 import { LoadSurveyList } from '@/domain/usecases/load-survey-list'
 import { SurveyModel } from '@/domain/models'
 import { mockSurveyListModel } from '@/domain/test'
+import { UnexpectedError } from '@/domain/errors'
 
 class LoadSurveyListSpy implements LoadSurveyList {
   callsCount = 0
@@ -21,9 +22,7 @@ type SutTypes = {
   loadSurveyListSpy: LoadSurveyListSpy
 }
 
-const makeSut = (): SutTypes => {
-  const loadSurveyListSpy = new LoadSurveyListSpy()
-
+const makeSut = (loadSurveyListSpy = new LoadSurveyListSpy()): SutTypes => {
   render(
     <ThemeProvider theme={light}>
       <SurveyList loadSurveyList={loadSurveyListSpy} />
@@ -37,6 +36,7 @@ describe('SurveyList Page', () => {
   test('Should present 4 items empty on start', async () => {
     makeSut()
     expect(screen.getAllByTestId('survey-item-empty')).toHaveLength(4)
+    expect(screen.queryByTestId('survey-error')).not.toBeInTheDocument()
     await waitFor(() => screen.getByTestId('survey-content'))
   })
 
@@ -50,5 +50,17 @@ describe('SurveyList Page', () => {
     makeSut()
     await waitFor(() => screen.getByTestId('survey-content'))
     expect(screen.getAllByTestId('survey-item')).toHaveLength(3)
+    expect(screen.queryByTestId('survey-error')).not.toBeInTheDocument()
+  })
+
+  test('Should render error on failure', async () => {
+    const loadSurveyListSpy = new LoadSurveyListSpy()
+    const error = new UnexpectedError()
+    jest.spyOn(loadSurveyListSpy, 'loadAll').mockRejectedValueOnce(error)
+
+    makeSut(loadSurveyListSpy)
+    await waitFor(() => screen.getByTestId('survey-content'))
+
+    expect(screen.getByTestId('survey-error')).toBeInTheDocument()
   })
 })
