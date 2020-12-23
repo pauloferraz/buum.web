@@ -6,7 +6,9 @@ import Sidebar from '@/presentation/components/sidebar'
 import Header from '@/presentation/components/header'
 import {
   SurveyItem,
-  SurveyItemEmpty
+  SurveyItemEmpty,
+  SurveyError,
+  SurveyContext
 } from '@/presentation/pages/survey-list/components'
 
 import {
@@ -42,24 +44,23 @@ const SurveyList: React.FC<Props> = ({ loadSurveyList }: Props) => {
           <Header />
           <SurveyWrap>
             <PageTitle>Minhas Enquetes</PageTitle>
-            <SurveyContent data-testid='survey-content'>
-              {state.error.length ? (
-                <div data-testid='survey-error'>
-                  <span>{state.error}</span>
-                  <button>Recarregar</button>
-                </div>
-              ) : (
-                <>
-                  {state.surveys.length ? (
-                    state.surveys.map((survey: SurveyModel) => (
-                      <SurveyItem key={survey.id} survey={survey} />
-                    ))
-                  ) : (
-                    <SurveyItemEmpty />
-                  )}
-                </>
-              )}
-            </SurveyContent>
+            <SurveyContext.Provider value={{ state, setState }}>
+              <SurveyContent data-testid='survey-content'>
+                {state.error.length ? (
+                  <SurveyError />
+                ) : (
+                  <>
+                    {state.surveys.length ? (
+                      state.surveys.map((survey: SurveyModel) => (
+                        <SurveyItem key={survey.id} survey={survey} />
+                      ))
+                    ) : (
+                      <SurveyItemEmpty />
+                    )}
+                  </>
+                )}
+              </SurveyContent>
+            </SurveyContext.Provider>
           </SurveyWrap>
         </PageContent>
       </PageWrap>
