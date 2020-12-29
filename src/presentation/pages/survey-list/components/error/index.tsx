@@ -7,7 +7,6 @@ const Error: React.FC = () => {
   return (
     <div data-testid='survey-error'>
       <span>{state.error}</span>
-      <button>Recarregar</button>
     </div>
   )
 }
