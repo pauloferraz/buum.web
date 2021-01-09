@@ -12,9 +12,14 @@ export class RemoteLoadSurveyList implements LoadSurveyList {
   async loadAll(): Promise<SurveyModel[]> {
     const httpResponse = await this.httpGetClient.get({ url: this.url })
 
+    const remoteSurveys = httpResponse.body || []
     switch (httpResponse.statusCode) {
       case HttpStatusCode.ok:
-        return httpResponse.body
+        return remoteSurveys.map(remoteSurvey =>
+          Object.assign(remoteSurvey, {
+            date: new Date(remoteSurvey.date)
+          })
+        )
       case HttpStatusCode.noContent:
         return []
       default:
