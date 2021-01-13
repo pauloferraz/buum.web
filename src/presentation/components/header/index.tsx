@@ -1,9 +1,18 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { ApiContext } from '@/presentation/contexts'
+import { useHistory } from 'react-router-dom'
 import { HeaderWrap, Column, HeaderName, HeaderTitle, ButtonLogout } from './styles'
 
 import { FiLogOut } from 'react-icons/fi'
 
 const Header: React.FC = () => {
+  const { setCurrentAccount } = useContext(ApiContext)
+  const history = useHistory()
+  const logout = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+    event.preventDefault()
+    setCurrentAccount(undefined)
+    history.replace('/login')
+  }
   return (
     <HeaderWrap>
       <Column>
@@ -11,7 +20,7 @@ const Header: React.FC = () => {
         <HeaderTitle>Bem vindo! 👋</HeaderTitle>
       </Column>
       <Column textAlign='end'>
-        <ButtonLogout>
+        <ButtonLogout data-testid='logout' onClick={logout}>
           <FiLogOut size={20} />
         </ButtonLogout>
       </Column>
