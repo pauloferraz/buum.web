@@ -6,7 +6,7 @@ import { HeaderWrap, Column, HeaderName, HeaderTitle, ButtonLogout } from './sty
 import { FiLogOut } from 'react-icons/fi'
 
 const Header: React.FC = () => {
-  const { setCurrentAccount } = useContext(ApiContext)
+  const { setCurrentAccount, getCurrentAccount } = useContext(ApiContext)
   const history = useHistory()
   const logout = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
     event.preventDefault()
@@ -16,7 +16,9 @@ const Header: React.FC = () => {
   return (
     <HeaderWrap>
       <Column>
-        <HeaderName>Olá Paulo Ferraz,</HeaderName>
+        <HeaderName data-testid='username'>
+          Olá {getCurrentAccount().name},
+        </HeaderName>
         <HeaderTitle>Bem vindo! 👋</HeaderTitle>
       </Column>
       <Column textAlign='end'>
