@@ -17,7 +17,7 @@
   },
   "editor.tabSize": 2,
   "files.trimTrailingWhitespace": true,
-  "workbench.tree.indent": 2,
+  "workbench.tree.indent": 20,
   "prettier.vueIndentScriptAndStyle": true,
   "prettier.arrowParens": "avoid",
   "prettier.printWidth": 85
