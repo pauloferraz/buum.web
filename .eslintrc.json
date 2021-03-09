@@ -4,12 +4,8 @@
       "version": "detect"
     }
   },
-  "extends": [
-    "standard-with-typescript",
-    "plugin:react/recommended",
-    "plugin:cypress/recommended"
-  ],
-  "plugins": ["react", "cypress"],
+  "extends": ["standard-with-typescript", "plugin:react/recommended"],
+  "plugins": ["react"],
   "env": {
     "cypress/globals": true
   },
