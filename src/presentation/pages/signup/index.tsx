@@ -53,19 +53,19 @@ const Signup: React.FC<Props> = ({ validation, addAccount }: Props) => {
       formData
     )
 
-    setState({
-      ...state,
+    setState(old => ({
+      ...old,
       invalidForm:
         !!nameError || !!emailError || !!passwordError || !!passwordConfirmationError
-    })
+    }))
 
-    setStateError({
-      ...stateError,
+    setStateError(old => ({
+      ...old,
       nameError,
       emailError,
       passwordError,
       passwordConfirmationError
-    })
+    }))
   }, [state.name, state.email, state.password, state.passwordConfirmation])
 
   const handleSubmit = async (

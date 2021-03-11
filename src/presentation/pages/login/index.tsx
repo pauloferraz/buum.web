@@ -41,10 +41,10 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
     const emailError = validation.validade('email', formData)
     const passwordError = validation.validade('password', formData)
 
-    setState({
-      ...state,
+    setState(old => ({
+      ...old,
       invalidForm: !!emailError || !!passwordError
-    })
+    }))
   }, [state.email, state.password])
 
   const handleSubmit = async (
