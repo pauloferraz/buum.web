@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node index",
     "dev": "webpack-dev-server --open --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
     "test": "cross-env NODE_ICU_DATA=node_modules/full-icu jest --passWithNoTests --no-cache --runInBand",
@@ -60,6 +61,8 @@
   "dependencies": {
     "@types/styled-components": "^5.1.4",
     "axios": "^0.21.0",
+    "express": "^4.17.1",
+    "express-history-api-fallback": "^2.2.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-icons": "^4.1.0",
