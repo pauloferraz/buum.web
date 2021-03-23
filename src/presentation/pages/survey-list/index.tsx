@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { LoadSurveyList } from '@/domain/usecases/load-survey-list'
 import { SurveyModel } from '@/domain/models'
-import Sidebar from '@/presentation/components/sidebar'
-import Header from '@/presentation/components/header'
+import { Header } from '@/presentation/components'
 import {
   SurveyItem,
   SurveyItemEmpty,
-  SurveyError,
-  SurveyContext
+  SurveyError
 } from '@/presentation/pages/survey-list/components'
 
 import {
@@ -17,6 +15,7 @@ import {
   SurveyWrap,
   SurveyContent
 } from './styles'
+
 import { useErrorHandler } from '@/presentation/hooks'
 
 type Props = {
@@ -42,29 +41,26 @@ const SurveyList: React.FC<Props> = ({ loadSurveyList }: Props) => {
 
   return (
     <>
-      <Sidebar />
       <PageWrap>
         <PageContent>
           <Header />
           <SurveyWrap>
             <PageTitle>Minhas Enquetes</PageTitle>
-            <SurveyContext.Provider value={{ state, setState }}>
-              <SurveyContent data-testid='survey-content'>
-                {state.error.length ? (
-                  <SurveyError />
-                ) : (
-                  <>
-                    {state.surveys.length ? (
-                      state.surveys.map((survey: SurveyModel) => (
-                        <SurveyItem key={survey.id} survey={survey} />
-                      ))
-                    ) : (
-                      <SurveyItemEmpty />
-                    )}
-                  </>
-                )}
-              </SurveyContent>
-            </SurveyContext.Provider>
+            <SurveyContent data-testid='survey-content'>
+              {state.error.length ? (
+                <SurveyError error={state.error} />
+              ) : (
+                <>
+                  {state.surveys.length ? (
+                    state.surveys.map((survey: SurveyModel) => (
+                      <SurveyItem key={survey.id} survey={survey} />
+                    ))
+                  ) : (
+                    <SurveyItemEmpty />
+                  )}
+                </>
+              )}
+            </SurveyContent>
           </SurveyWrap>
         </PageContent>
       </PageWrap>

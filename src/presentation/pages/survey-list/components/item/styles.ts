@@ -23,7 +23,7 @@ export const SurveyItemWrap = styled.div`
     right: 10px;
     height: 6px;
     border-radius: 0 0 6px 6px;
-    background: #cfc8ff;
+    background: #988fe0;
     transition: opacity 0.25s;
   }
 
@@ -68,6 +68,7 @@ export const SurveyDate = styled.div`
   height: 80px;
   margin-right: 10px;
   border-radius: 12px;
+  background: rgba(255, 255, 255, 0.3);
 `
 export const SurveyDateMini = styled.span`
   color: ${props => props.theme.colors.white};

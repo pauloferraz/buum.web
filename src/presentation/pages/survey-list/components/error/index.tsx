@@ -1,13 +1,14 @@
-import React, { useContext } from 'react'
-import { SurveyContext } from '@/presentation/pages/survey-list/components'
+import React from 'react'
 import { SurveyErrorWrap, SurveyErrorText } from './styles'
 
-const Error: React.FC = () => {
-  const { state } = useContext(SurveyContext)
+type Props = {
+  error: string
+}
 
+const Error: React.FC<Props> = ({ error }: Props) => {
   return (
     <SurveyErrorWrap data-testid='survey-error'>
-      <SurveyErrorText>{state.error}</SurveyErrorText>
+      <SurveyErrorText>{error}</SurveyErrorText>
     </SurveyErrorWrap>
   )
 }
