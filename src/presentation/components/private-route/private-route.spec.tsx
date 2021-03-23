@@ -4,6 +4,8 @@ import { render } from '@testing-library/react'
 import { createMemoryHistory, MemoryHistory } from 'history'
 import PrivateRoute from './private-route'
 import { ApiContext } from '@/presentation/contexts'
+import { ThemeProvider } from 'styled-components'
+import light from '@/presentation/theme/light'
 import { mockAccountModel } from '@/domain/test'
 
 type SutTypes = {
@@ -13,11 +15,13 @@ type SutTypes = {
 const makeSut = (account = mockAccountModel()): SutTypes => {
   const history = createMemoryHistory({ initialEntries: ['/'] })
   render(
-    <ApiContext.Provider value={{ getCurrentAccount: () => account }}>
-      <Router history={history}>
-        <PrivateRoute />
-      </Router>
-    </ApiContext.Provider>
+    <ThemeProvider theme={light}>
+      <ApiContext.Provider value={{ getCurrentAccount: () => account }}>
+        <Router history={history}>
+          <PrivateRoute />
+        </Router>
+      </ApiContext.Provider>
+    </ThemeProvider>
   )
   return { history }
 }
