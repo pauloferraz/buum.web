@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { LoadSurveyList } from '@/domain/usecases/load-survey-list'
 import { SurveyModel } from '@/domain/models'
-import { Header } from '@/presentation/components'
+import { Error, Header } from '@/presentation/components'
 import {
   SurveyItem,
-  SurveyItemEmpty,
-  SurveyError
+  SurveyItemEmpty
 } from '@/presentation/pages/survey-list/components'
 
 import {
@@ -48,7 +47,7 @@ const SurveyList: React.FC<Props> = ({ loadSurveyList }: Props) => {
             <PageTitle>Minhas Enquetes</PageTitle>
             <SurveyContent data-testid='survey-content'>
               {state.error.length ? (
-                <SurveyError error={state.error} />
+                <Error error={state.error} />
               ) : (
                 <>
                   {state.surveys.length ? (

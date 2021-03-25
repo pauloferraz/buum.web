@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { Button, Header } from '@/presentation/components'
+import React, { useEffect, useState } from 'react'
+import { Button, Header, Error } from '@/presentation/components'
 import { SurveyResultEmpty } from './components'
 import {
   PageWrap,
@@ -14,14 +14,34 @@ import {
   SurveyItem
 } from './styles'
 import { LoadSurveyResult } from '@/domain/usecases/load-survey-result'
+import { SurveyResultModel } from '@/domain/models'
+import { useErrorHandler } from '@/presentation/hooks'
 
 type Props = {
   loadSurveyResult: LoadSurveyResult
 }
 
 const SurveyResult: React.FC<Props> = ({ loadSurveyResult }: Props) => {
+  const handlerError = useErrorHandler((error: Error) =>
+    setState(old => ({ ...old, error: error.message }))
+  )
+
+  const [state, setState] = useState({
+    isLoading: true,
+    error: '',
+    surveyResult: null as SurveyResultModel
+  })
+
   useEffect(() => {
-    loadSurveyResult.load().then().catch()
+    loadSurveyResult
+      .load()
+      .then(surveyResult =>
+        setState(old => ({
+          ...old,
+          surveyResult
+        }))
+      )
+      .catch(handlerError)
   }, [])
 
   return (
@@ -29,43 +49,51 @@ const SurveyResult: React.FC<Props> = ({ loadSurveyResult }: Props) => {
       <PageWrap>
         <PageContent>
           <Header />
-          <SurveyWrap>
-            <SurveyResultEmpty />
-            <SurveyHeader>
-              <SurveyDate>
-                <SurveyDateMini data-testid='month'>JAN</SurveyDateMini>
-                <SurveyDateText data-testid='day'>13</SurveyDateText>
-                <SurveyDateMini data-testid='year'>2021</SurveyDateMini>
-              </SurveyDate>
-              <SurveyTitle>Uma enquete qualquer?</SurveyTitle>
-            </SurveyHeader>
-            <SurveyList>
-              <SurveyItem>
-                <img
-                  src='https://cdn.auth0.com/blog/react-js/react.png'
-                  alt='react'
-                />
-                <span>React</span>
-                <strong>50%</strong>
-              </SurveyItem>
-              <SurveyItem className='active'>
-                <img
-                  src='https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png'
-                  alt='vue'
-                />
-                <span>Vue</span>
-                <strong>30%</strong>
-              </SurveyItem>
-              <SurveyItem>
-                <img
-                  src='https://img2.gratispng.com/20180701/rht/kisspng-angularjs-logo-javascript-security-token-5b38e22b8a3f38.7851363415304545715663.jpg'
-                  alt='react'
-                />
-                <span>Angular</span>
-                <strong>20%</strong>
-              </SurveyItem>
-            </SurveyList>
-            <Button text='Responder' />
+          <SurveyWrap data-testid='survey-result'>
+            {state.isLoading && <SurveyResultEmpty />}
+            {state.error && <Error error={state.error} />}
+            {state.surveyResult && (
+              <>
+                <SurveyHeader>
+                  <SurveyDate>
+                    <SurveyDateMini data-testid='month'>
+                      {state.surveyResult.date
+                        .toLocaleString('pt-BR', { month: 'short' })
+                        .replace('.', '')}
+                    </SurveyDateMini>
+                    <SurveyDateText data-testid='day'>
+                      {state.surveyResult.date.getDate().toString().padStart(2, '0')}
+                    </SurveyDateText>
+                    <SurveyDateMini data-testid='year'>
+                      {state.surveyResult.date.getFullYear()}
+                    </SurveyDateMini>
+                  </SurveyDate>
+                  <SurveyTitle data-testid='question'>
+                    {state.surveyResult.question}
+                  </SurveyTitle>
+                </SurveyHeader>
+                <SurveyList data-testid='answers'>
+                  {state.surveyResult.answers.map(answer => (
+                    <SurveyItem
+                      data-testid='answer-wrap'
+                      key={answer.answer}
+                      className={answer.isCurrentAccountAnswer ? 'active' : ''}
+                    >
+                      {answer.image && (
+                        <img
+                          data-testid='image'
+                          src={answer.image}
+                          alt={answer.answer}
+                        />
+                      )}
+                      <span data-testid='answer'>{answer.answer}</span>
+                      <strong data-testid='percent'>{answer.percent}%</strong>
+                    </SurveyItem>
+                  ))}
+                </SurveyList>
+                <Button text='Responder' />
+              </>
+            )}
           </SurveyWrap>
         </PageContent>
       </PageWrap>
