@@ -12,7 +12,7 @@ import {
 } from '@/main/adapters/current-account-adapter'
 import { PrivateRoute } from '@/presentation/components'
 import { makeSurveyList } from '@/main/factories/pages/survey-list/survey-list-factory'
-import SurveyResult from '@/presentation/pages/survey-result'
+import { makeSurveyResult } from '../factories/pages/survey-result/survey-result-factory'
 
 const Router: React.FC = () => {
   return (
@@ -29,7 +29,7 @@ const Router: React.FC = () => {
             <Route path='/login' exact component={makeLogin} />
             <Route path='/signup' exact component={makeSignup} />
             <PrivateRoute path='/' exact component={makeSurveyList} />
-            <PrivateRoute path='/surveys' exact component={SurveyResult} />
+            <PrivateRoute path='/surveys/:id' component={makeSurveyResult} />
           </Switch>
         </BrowserRouter>
       </ApiContext.Provider>
