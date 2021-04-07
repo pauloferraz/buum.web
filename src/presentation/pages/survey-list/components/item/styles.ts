@@ -6,14 +6,19 @@ export const SurveyItemWrap = styled.div`
   width: calc(50% - 32px);
   margin: 32px 16px 0;
   background: ${props => props.theme.colors.primary};
-  padding: 10px 15px 10px 10px;
   position: relative;
   border-radius: 12px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
   cursor: pointer;
   transition: all 0.25s;
+
+  a {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 15px 10px 10px;
+    text-decoration: none;
+    border-radius: 12px;
+  }
 
   &:before {
     content: '';

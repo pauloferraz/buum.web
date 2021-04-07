@@ -86,6 +86,7 @@ export const SurveyList = styled.ul`
 
 export const SurveyItem = styled.li`
   list-style: none;
+  height: 50px;
   margin: 10px 0px 0px 0px;
   padding: 4px 14px 4px 4px;
   border: 1px solid #e4e4e4;
