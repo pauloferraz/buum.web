@@ -1,5 +1,9 @@
 import { SurveyResultModel } from '@/domain/models'
-import { LoadSurveyResult, SaveSurveyResultModel } from '@/domain/usecases'
+import {
+  LoadSurveyResult,
+  SaveSurveyResult,
+  SaveSurveyResultModel
+} from '@/domain/usecases'
 import faker from 'faker'
 
 export const mockSaveSurveyResultModel = (): SaveSurveyResultModel => ({
@@ -32,6 +36,16 @@ export class LoadSurveyResultSpy implements LoadSurveyResult {
 
   async load(): Promise<SurveyResultModel> {
     this.callsCount++
+    return this.surveyResult
+  }
+}
+
+export class SaveSurveyResultSpy implements SaveSurveyResult {
+  params: SaveSurveyResultModel
+  surveyResult = mockSurveyResultModel()
+
+  async save(params: SaveSurveyResultModel): Promise<SurveyResultModel> {
+    this.params = params
     return this.surveyResult
   }
 }
