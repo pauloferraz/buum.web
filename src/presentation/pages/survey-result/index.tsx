@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Header, Error } from '@/presentation/components'
-import { SurveyResultEmpty } from './components'
+import { SurveyResultEmpty, Answer, SurveyResultContext } from './components'
 import {
   PageWrap,
   PageContent,
@@ -10,18 +10,21 @@ import {
   SurveyDate,
   SurveyDateMini,
   SurveyDateText,
-  SurveyList,
-  SurveyItem
+  AnswerList
 } from './styles'
-import { LoadSurveyResult } from '@/domain/usecases/load-survey-result'
+import { LoadSurveyResult, SaveSurveyResult } from '@/domain/usecases'
 import { SurveyResultModel } from '@/domain/models'
 import { useErrorHandler } from '@/presentation/hooks'
 
 type Props = {
   loadSurveyResult: LoadSurveyResult
+  saveSurveyResult: SaveSurveyResult
 }
 
-const SurveyResult: React.FC<Props> = ({ loadSurveyResult }: Props) => {
+const SurveyResult: React.FC<Props> = ({
+  loadSurveyResult,
+  saveSurveyResult
+}: Props) => {
   const handlerError = useErrorHandler((error: Error) =>
     setState(old => ({ ...old, error: error.message }))
   )
@@ -31,6 +34,11 @@ const SurveyResult: React.FC<Props> = ({ loadSurveyResult }: Props) => {
     error: '',
     surveyResult: null as SurveyResultModel
   })
+
+  const onAnswer = (answer: string): void => {
+    setState(old => ({ ...old, isLoading: true }))
+    saveSurveyResult.save({ answer }).then().catch()
+  }
 
   useEffect(() => {
     loadSurveyResult
@@ -50,52 +58,43 @@ const SurveyResult: React.FC<Props> = ({ loadSurveyResult }: Props) => {
       <PageWrap>
         <PageContent>
           <Header />
-          <SurveyWrap data-testid='survey-result'>
-            {state.isLoading && <SurveyResultEmpty />}
-            {state.error && <Error error={state.error} />}
-            {state.surveyResult && (
-              <>
-                <SurveyHeader>
-                  <SurveyDate>
-                    <SurveyDateMini data-testid='month'>
-                      {state.surveyResult.date
-                        .toLocaleString('pt-BR', { month: 'short' })
-                        .replace('.', '')}
-                    </SurveyDateMini>
-                    <SurveyDateText data-testid='day'>
-                      {state.surveyResult.date.getDate().toString().padStart(2, '0')}
-                    </SurveyDateText>
-                    <SurveyDateMini data-testid='year'>
-                      {state.surveyResult.date.getFullYear()}
-                    </SurveyDateMini>
-                  </SurveyDate>
-                  <SurveyTitle data-testid='question'>
-                    {state.surveyResult.question}
-                  </SurveyTitle>
-                </SurveyHeader>
-                <SurveyList data-testid='answers'>
-                  {state.surveyResult.answers.map(answer => (
-                    <SurveyItem
-                      data-testid='answer-wrap'
-                      key={answer.answer}
-                      className={answer.isCurrentAccountAnswer ? 'active' : ''}
-                    >
-                      {answer.image && (
-                        <img
-                          data-testid='image'
-                          src={answer.image}
-                          alt={answer.answer}
-                        />
-                      )}
-                      <span data-testid='answer'>{answer.answer}</span>
-                      <strong data-testid='percent'>{answer.percent}%</strong>
-                    </SurveyItem>
-                  ))}
-                </SurveyList>
-                <Button text='Responder' />
-              </>
-            )}
-          </SurveyWrap>
+          <SurveyResultContext.Provider value={{ onAnswer }}>
+            <SurveyWrap data-testid='survey-result'>
+              {state.isLoading && <SurveyResultEmpty />}
+              {state.error && <Error error={state.error} />}
+              {state.surveyResult && (
+                <>
+                  <SurveyHeader>
+                    <SurveyDate>
+                      <SurveyDateMini data-testid='month'>
+                        {state.surveyResult.date
+                          .toLocaleString('pt-BR', { month: 'short' })
+                          .replace('.', '')}
+                      </SurveyDateMini>
+                      <SurveyDateText data-testid='day'>
+                        {state.surveyResult.date
+                          .getDate()
+                          .toString()
+                          .padStart(2, '0')}
+                      </SurveyDateText>
+                      <SurveyDateMini data-testid='year'>
+                        {state.surveyResult.date.getFullYear()}
+                      </SurveyDateMini>
+                    </SurveyDate>
+                    <SurveyTitle data-testid='question'>
+                      {state.surveyResult.question}
+                    </SurveyTitle>
+                  </SurveyHeader>
+                  <AnswerList data-testid='answers'>
+                    {state.surveyResult.answers.map(answer => (
+                      <Answer answer={answer} key={answer.answer} />
+                    ))}
+                  </AnswerList>
+                  <Button text='Responder' />
+                </>
+              )}
+            </SurveyWrap>
+          </SurveyResultContext.Provider>
         </PageContent>
       </PageWrap>
     </>

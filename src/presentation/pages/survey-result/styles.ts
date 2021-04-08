@@ -80,11 +80,11 @@ export const SurveyDateText = styled.span`
   font-weight: 500;
 `
 
-export const SurveyList = styled.ul`
+export const AnswerList = styled.ul`
   margin-top: 30px;
 `
 
-export const SurveyItem = styled.li`
+export const AnswerItem = styled.li`
   list-style: none;
   height: 50px;
   margin: 10px 0px 0px 0px;
