@@ -1,5 +1,5 @@
 import { RemoteLoadSurveyList } from './remote-load-survey-list'
-import { HttpGetClientSpy } from '@/data/tests'
+import { HttpClientSpy } from '@/data/tests'
 import { AccessDeniedError, UnexpectedError } from '@/domain/errors'
 import { HttpStatusCode } from '@/data/protocols/http'
 import { SurveyModel } from '@/domain/models'
@@ -8,30 +8,31 @@ import faker from 'faker'
 
 type SutTypes = {
   sut: RemoteLoadSurveyList
-  httpGetClientSpy: HttpGetClientSpy<SurveyModel[]>
+  httpClientSpy: HttpClientSpy<SurveyModel[]>
 }
 
 const makeSut = (url = faker.internet.url()): SutTypes => {
-  const httpGetClientSpy = new HttpGetClientSpy<SurveyModel[]>()
-  const sut = new RemoteLoadSurveyList(url, httpGetClientSpy)
+  const httpClientSpy = new HttpClientSpy<SurveyModel[]>()
+  const sut = new RemoteLoadSurveyList(url, httpClientSpy)
 
   return {
     sut,
-    httpGetClientSpy
+    httpClientSpy
   }
 }
 
 describe('Remote load survey list', () => {
-  test('should call HttpGetClient with correct url', async () => {
+  test('should call HttpGetClient with correct URL and Method', async () => {
     const url = faker.internet.url()
-    const { sut, httpGetClientSpy } = makeSut(url)
+    const { sut, httpClientSpy } = makeSut(url)
     await sut.loadAll()
-    expect(httpGetClientSpy.url).toBe(url)
+    expect(httpClientSpy.url).toBe(url)
+    expect(httpClientSpy.method).toBe('get')
   })
 
   test('should throw AccessDeniedError in HttpGetClient returns 403', async () => {
-    const { sut, httpGetClientSpy } = makeSut()
-    httpGetClientSpy.response = {
+    const { sut, httpClientSpy } = makeSut()
+    httpClientSpy.response = {
       statusCode: HttpStatusCode.forbidden
     }
     const promise = sut.loadAll()
@@ -39,8 +40,8 @@ describe('Remote load survey list', () => {
   })
 
   test('should throw UnexpectedError in HttpGetClient returns 404', async () => {
-    const { sut, httpGetClientSpy } = makeSut()
-    httpGetClientSpy.response = {
+    const { sut, httpClientSpy } = makeSut()
+    httpClientSpy.response = {
       statusCode: HttpStatusCode.notFound
     }
     const promise = sut.loadAll()
@@ -48,8 +49,8 @@ describe('Remote load survey list', () => {
   })
 
   test('should throw UnexpectedError in HttpGetClient returns 500', async () => {
-    const { sut, httpGetClientSpy } = makeSut()
-    httpGetClientSpy.response = {
+    const { sut, httpClientSpy } = makeSut()
+    httpClientSpy.response = {
       statusCode: HttpStatusCode.serverError
     }
     const promise = sut.loadAll()
@@ -57,9 +58,9 @@ describe('Remote load survey list', () => {
   })
 
   test('should return a list of SurveyModel in HttpGetClient returns 200', async () => {
-    const { sut, httpGetClientSpy } = makeSut()
+    const { sut, httpClientSpy } = makeSut()
     const httpResult = mockSurveyListModel()
-    httpGetClientSpy.response = {
+    httpClientSpy.response = {
       statusCode: HttpStatusCode.ok,
       body: httpResult
     }
@@ -68,8 +69,8 @@ describe('Remote load survey list', () => {
   })
 
   test('should return an empty list of SurveyModel in HttpGetClient returns 204', async () => {
-    const { sut, httpGetClientSpy } = makeSut()
-    httpGetClientSpy.response = {
+    const { sut, httpClientSpy } = makeSut()
+    httpClientSpy.response = {
       statusCode: HttpStatusCode.noContent
     }
     const surveyList = await sut.loadAll()
