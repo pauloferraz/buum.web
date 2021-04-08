@@ -1,7 +1,7 @@
 import { HttpClient, HttpStatusCode } from '@/data/protocols/http'
 import { AccessDeniedError, UnexpectedError } from '@/domain/errors'
 import { SurveyModel } from '@/domain/models'
-import { LoadSurveyList } from '@/domain/usecases/load-survey-list'
+import { LoadSurveyList } from '@/domain/usecases'
 
 export class RemoteLoadSurveyList implements LoadSurveyList {
   constructor(
