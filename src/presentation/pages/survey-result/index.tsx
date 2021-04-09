@@ -15,6 +15,7 @@ import {
 import { LoadSurveyResult, SaveSurveyResult } from '@/domain/usecases'
 import { SurveyResultModel } from '@/domain/models'
 import { useErrorHandler } from '@/presentation/hooks'
+import { useHistory } from 'react-router-dom'
 
 type Props = {
   loadSurveyResult: LoadSurveyResult
@@ -25,9 +26,7 @@ const SurveyResult: React.FC<Props> = ({
   loadSurveyResult,
   saveSurveyResult
 }: Props) => {
-  const handlerError = useErrorHandler((error: Error) =>
-    setState(old => ({ ...old, error: error.message }))
-  )
+  const { goBack } = useHistory()
 
   const [state, setState] = useState({
     isLoading: true,
@@ -35,9 +34,26 @@ const SurveyResult: React.FC<Props> = ({
     surveyResult: null as SurveyResultModel
   })
 
+  const handlerError = useErrorHandler((error: Error) =>
+    setState(old => ({ ...old, error: error.message }))
+  )
+
   const onAnswer = (answer: string): void => {
+    if (state.isLoading) {
+      return
+    }
+
     setState(old => ({ ...old, isLoading: true }))
-    saveSurveyResult.save({ answer }).then().catch()
+    saveSurveyResult
+      .save({ answer })
+      .then(surveyResult =>
+        setState(old => ({
+          ...old,
+          isLoading: false,
+          surveyResult
+        }))
+      )
+      .catch(handlerError)
   }
 
   useEffect(() => {
@@ -90,7 +106,7 @@ const SurveyResult: React.FC<Props> = ({
                       <Answer answer={answer} key={answer.answer} />
                     ))}
                   </AnswerList>
-                  <Button text='Responder' />
+                  <Button text='Voltar' onClick={goBack} />
                 </>
               )}
             </SurveyWrap>
